@@ -99,11 +99,51 @@ const FormularioCargaDatos = () => {
         {/* Renderizar las cajas de opción para los tags */}
         <label>
           <input type="checkbox" value="entrada" checked={tags.includes('entrada')} onChange={handleTagChange} />
-          Entrada
+           Entrada
+        </label>
+        <label>
+          <input type="checkbox" value="carnes" checked={tags.includes('carnes')} onChange={handleTagChange} />
+           Carnes
         </label>
         <label>
           <input type="checkbox" value="ensalada" checked={tags.includes('ensalada')} onChange={handleTagChange} />
-          Ensalada
+           Ensalada
+        </label>
+        <label>
+          <input type="checkbox" value="pastas" checked={tags.includes('pastas')} onChange={handleTagChange} />
+           Pastas
+        </label>
+        <label>
+          <input type="checkbox" value="woks" checked={tags.includes('woks')} onChange={handleTagChange} />
+           Woks
+        </label>
+        <label>
+          <input type="checkbox" value="sandwich" checked={tags.includes('sandwich')} onChange={handleTagChange} />
+           Sándwiches
+        </label>
+        <label>
+          <input type="checkbox" value="postres" checked={tags.includes('postres')} onChange={handleTagChange} />
+           Postres
+        </label>
+        <label>
+          <input type="checkbox" value="cafeteria" checked={tags.includes('cafeteria')} onChange={handleTagChange} />
+           cafetria
+        </label>
+        <label>
+          <input type="checkbox" value="gaseosa" checked={tags.includes('gaseosa')} onChange={handleTagChange} />
+           Gaseosa
+        </label>
+        <label>
+          <input type="checkbox" value="jugos" checked={tags.includes('jugos')} onChange={handleTagChange} />
+           Jugos y Licuados
+        </label>
+        <label>
+          <input type="checkbox" value="limonada" checked={tags.includes('limonada')} onChange={handleTagChange} />
+           Limonadas
+        </label>
+        <label>
+          <input type="checkbox" value="cerveza" checked={tags.includes('cerveza')} onChange={handleTagChange} />
+           Cerveza
         </label>
         {/* Agregar el resto de las opciones de tags aquí */}
       </div>

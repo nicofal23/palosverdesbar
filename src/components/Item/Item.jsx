@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import styles from '../Item/Item.module.css';
 
-const Item = ({ id, nombre, img, precio, stock }) => {
+const Item = ({ id, nombre, img, precio, stock, descripcion}) => {
     const isStockAvailable = stock > 0;
 
     return (
@@ -12,6 +12,9 @@ const Item = ({ id, nombre, img, precio, stock }) => {
                     <h2 className={styles.ItemHeader}>
                         {nombre}
                     </h2>
+                    <p className={styles.ItemHeader}>
+                         {descripcion}
+                    </p>
                 </div>
                 <section> 
                     <p className={styles.Precio}>

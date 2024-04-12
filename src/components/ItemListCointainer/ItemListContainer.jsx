@@ -9,14 +9,14 @@ import { useParams } from 'react-router-dom';
 const ItemListContainer = ({ greeting }) => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState(null); // Estado para almacenar la categoría seleccionada
-  const [showButtons, setShowButtons] = useState(true); // Estado para controlar la visibilidad de los botones
+  const [selectedCategory, setSelectedCategory] = useState(null); 
+  const [showButtons, setShowButtons] = useState(true); 
   const { categoryId } = useParams();
 
   useEffect(() => {
     setLoading(true);
 
-    const collectionRef = selectedCategory // Si hay una categoría seleccionada, filtramos por ella
+    const collectionRef = selectedCategory 
       ? query(collection(db, 'productos'), where('category', '==', selectedCategory))
       : collection(db, 'productos');
 
@@ -34,18 +34,16 @@ const ItemListContainer = ({ greeting }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [selectedCategory]); // Cambiamos el efecto para que se ejecute cuando cambia la categoría seleccionada
+  }, [selectedCategory]); 
 
-  // Función para manejar el clic en las categorías
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
-    setShowButtons(false); // Ocultar los botones cuando se hace clic en una categoría
+    setShowButtons(false); 
   };
 
-  // Función para manejar el clic en el botón "Volver"
   const handleReturnClick = () => {
     setSelectedCategory(null);
-    setShowButtons(true); // Mostrar los botones cuando se hace clic en "Volver"
+    setShowButtons(true); 
   };
 
   return (
@@ -53,22 +51,24 @@ const ItemListContainer = ({ greeting }) => {
       <div className={style.row}>
         <div className={style.col}>
           <h2 className={`${style.mt5} ${style.greeting}`}>{greeting}</h2>
+          {/* Mostrar el spinner de carga mientras se cargan los productos */}
+          {loading && <LoadingSpinner />}
           {/* Interfaz para seleccionar la categoría */}
-          <div className={style.categoryButtons}>
+          <div className={style.categoryButtons} style={{ display: loading ? 'none' : 'block' }}>
             <div className={style.gridContainer}>
               {showButtons && (
                 <>
                   <div className={`${style.gridItem} ${style.resto}`} onClick={() => handleCategoryClick('restaurant')}>
-                    <button className={style.button} >Restaurant</button>
+                    <button className={style.button}>Restaurant</button>
                   </div>
                   <div className={`${style.gridItem} ${style.cafe}`}>
-                    <button className={style.button} onClick={() => handleCategoryClick('jarras')}>Cafeteria</button>
+                    <button className={style.button} onClick={() => handleCategoryClick('cafeteria')}>Cafeteria</button>
                   </div>
                   <div className={`${style.gridItem} ${style.cock}`}>
-                    <button className={style.button} onClick={() => handleCategoryClick('sarten')}>Cocktails</button>
+                    <button className={style.button} onClick={() => handleCategoryClick('cocktails')}>Cocktails</button>
                   </div>
                   <div className={`${style.gridItem} ${style.vino}`}>
-                    <button className={style.button} onClick={() => handleCategoryClick('ollas')}>Vinos y Espumantes</button>
+                    <button className={style.button} onClick={() => handleCategoryClick('vinos')}>Vinos y Espumantes</button>
                   </div>
                 </>
               )}
@@ -84,8 +84,6 @@ const ItemListContainer = ({ greeting }) => {
           {selectedCategory !== null && !loading && productos.length > 0 && (
             <ItemList productos={productos} />
           )}
-          {/* Mostrar el spinner de carga mientras se cargan los productos */}
-          {loading && <LoadingSpinner />}
           {/* Mensaje de que no hay productos disponibles */}
           {selectedCategory !== null && !loading && productos.length === 0 && (
             <p>No hay productos disponibles en esta categoría.</p>
