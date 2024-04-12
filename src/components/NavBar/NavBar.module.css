@@ -64,7 +64,21 @@
 }
 
 
-
+@media screen and (max-width: 873px) {
+  .moniessen {
+    width: 300px;
+  }
+}
+@media screen and (max-width: 662px) {
+  .moniessen {
+    width: 250px;
+  }
+}
+@media screen and (max-width: 526px) {
+  .moniessen {
+    width: 200px;
+  }
+}
 
 @media (max-width: 394px) {
  .moni {
