@@ -1,0 +1,73 @@
+.moniessen {
+  margin: 20px;
+}
+
+.NavBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.moni {
+  display: flex;
+  list-style: none;
+  align-items: center
+} 
+
+.li {
+  margin-right: 20px;
+  text-decoration: none;
+  list-style: none;
+}
+
+.subMenu {
+  display: none;
+  position: absolute;
+  background-color: #e878a2;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.subMenuButton {
+  background-color: #e878a2;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px 4px 0 0;
+  text-decoration: none;
+
+}
+
+.open {
+  display: block;
+}
+
+.carrito {
+  position: relative;
+}
+.ActiveOption {
+  text-decoration: none;
+  color: white;
+}
+
+.ActiveOptions {
+  background-color: #e878a2;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px 4px 0 0 ;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+
+
+
+@media (max-width: 394px) {
+ .moni {
+  flex-direction: column;
+  gap: 20px;
+ }
+}

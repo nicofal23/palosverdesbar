@@ -1,0 +1,29 @@
+.img {
+    width: 40px;
+  }
+
+  .cartWidgetVisible {
+    display: block;
+    margin: 0px 30px 30px 30px;
+    text-decoration: none;
+    color: #e878a2;
+    font-size: 20px;
+    gap: 15px;
+    display: flex;
+    font-weight: bold;
+  }
+  
+  .cartWidgetHidden {
+    display: none;
+    margin: 0px 30px 30px 30px;
+  }
+ 
+  main{
+    height: 100%;
+  }
+
+  @media (max-width: 394px) {
+    .cartWidget {
+      margin: 0px;
+    }
+  }
