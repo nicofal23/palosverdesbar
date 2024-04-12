@@ -2,23 +2,34 @@ import React, { useState } from 'react';
 import { db } from '../../firebase/cliente';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import style from './FormularioCargaDatos.module.css'; // Estilos CSS para el formulario
-import { storage } from '../../firebase/cliente'; // Ajusta la ruta según la ubicación de tu archivo de configuración
-
+import style from './FormularioCargaDatos.module.css'; 
+import { storage } from '../../firebase/cliente'; 
 
 const FormularioCargaDatos = () => {
   const [category, setCategory] = useState('');
   const [descripcion, setDescripcion] = useState('');
-  const [img, setImg] = useState(null); // Cambiado a null para representar el archivo de imagen seleccionado
+  const [img, setImg] = useState(null); 
   const [nombre, setNombre] = useState('');
   const [precio, setPrecio] = useState('');
-  const [tag, setTag] = useState('');
+  const [tags, setTags] = useState([]); // Cambiado a un array para almacenar múltiples tags seleccionados
   const [loading, setLoading] = useState(false);
 
   const handleImgChange = (e) => {
-    // Obtener el archivo de imagen seleccionado
     const file = e.target.files[0];
     setImg(file);
+  };
+
+  const handleTagChange = (e) => {
+    const { value } = e.target;
+    // Verificar si el tag ya está seleccionado
+    const alreadySelected = tags.includes(value);
+    if (alreadySelected) {
+      // Si está seleccionado, eliminarlo de la lista de tags
+      setTags(tags.filter(tag => tag !== value));
+    } else {
+      // Si no está seleccionado, agregarlo a la lista de tags
+      setTags([...tags, value]);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -27,30 +38,24 @@ const FormularioCargaDatos = () => {
   
     try {
       if (img) {
-        // Subir la imagen al storage
         const storageRef = ref(storage, 'images/' + img.name);
         await uploadBytes(storageRef, img);
-  
-        // Obtener la URL de la imagen subida
         const imgUrl = await getDownloadURL(storageRef);
-  
-        // Guardar los datos en la base de datos
         const docRef = await addDoc(collection(db, 'productos'), {
           category,
           descripcion,
           img: imgUrl,
           nombre,
           precio,
-          tag
+          tags // Almacenar los tags en la base de datos
         });
         console.log('Document written with ID: ', docRef.id);
-        // Limpiar los campos después de enviar los datos
         setCategory('');
         setDescripcion('');
         setImg(null);
         setNombre('');
         setPrecio('');
-        setTag('');
+        setTags([]);
       } else {
         console.error('Error: No se seleccionó ningún archivo de imagen.');
       }
@@ -89,21 +94,19 @@ const FormularioCargaDatos = () => {
         Precio:
         <input type="text" value={precio} onChange={(e) => setPrecio(e.target.value)} />
       </label>
-      <label>
-        Tag:
-        <select value={tag} onChange={(e) => setTag(e.target.value)}>
-          <option value="">Selecciona un tag</option>
-          <option value="entrada">Entrada</option>
-          <option value="ensalada">Ensalada</option>
-          <option value="carnes">Carnes</option>
-          <option value="pastas">Pastas</option>
-          <option value="woks">Woks</option>
-          <option value="sandwich">Sandwich</option>
-          <option value="sin_tacc">Sin TACC</option>
-          <option value="veggi">Veggi</option>
-          <option value="vegetariano">Vegetariano</option>
-        </select>
-      </label>
+      <div>
+        <p>Tags:</p>
+        {/* Renderizar las cajas de opción para los tags */}
+        <label>
+          <input type="checkbox" value="entrada" checked={tags.includes('entrada')} onChange={handleTagChange} />
+          Entrada
+        </label>
+        <label>
+          <input type="checkbox" value="ensalada" checked={tags.includes('ensalada')} onChange={handleTagChange} />
+          Ensalada
+        </label>
+        {/* Agregar el resto de las opciones de tags aquí */}
+      </div>
       <button type="submit" disabled={loading}>Guardar</button>
     </form>
   );

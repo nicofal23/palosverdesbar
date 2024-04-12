@@ -31,7 +31,4 @@
     .contenedorcart { 
         flex-direction: column;
     }
-    .card {
-        width: 260px;
-    }
 }

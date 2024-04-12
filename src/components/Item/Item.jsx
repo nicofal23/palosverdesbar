@@ -7,33 +7,37 @@ const Item = ({ id, nombre, img, precio, stock }) => {
 
     return (
         <article className={styles.CardItem}>
-            <div className={styles.Header}>
-                <h2 className={styles.ItemHeader}>
-                    {nombre}
-                </h2>
+            <div className={styles.Description}>
+                <div className={styles.Header}>
+                    <h2 className={styles.ItemHeader}>
+                        {nombre}
+                    </h2>
+                </div>
+                <section> 
+                    <p className={styles.Precio}>
+                         ${precio} 
+                    </p>
+                    <p className={styles.Info}>
+                         {stock}
+                    </p>
+                </section>
+                <footer className={styles.ItemFooter}>
+                    {isStockAvailable ? (
+                        <Link to={`/item/${id}`} className={styles.Option}>
+                            Ver detalle
+                        </Link>
+                    ) : (
+                        <button className={styles.OptionDisabled} disabled>
+                            no disponible
+                        </button>
+                    )}
+                </footer>
             </div>
-            <picture>
-                <img src={img} alt={nombre} className={styles.ItemImg} />
-            </picture>
-            <section> 
-                <p className={styles.Info}>
-                    Precio: ${precio} 
-                </p>
-                <p className={styles.Info}>
-                    Stock disponible: {stock}
-                </p>
-            </section>
-            <footer className={styles.ItemFooter}>
-                {isStockAvailable ? (
-                    <Link to={`/item/${id}`} className={styles.Option}>
-                        Ver detalle
-                    </Link>
-                ) : (
-                    <button className={styles.OptionDisabled} disabled>
-                        Sin stock
-                    </button>
-                )}
-            </footer>
+            <div className={styles.imga}>
+                <picture>
+                    <img src={img} alt={nombre} className={styles.ItemImg} />
+                </picture>
+            </div>
         </article>
     );
 };

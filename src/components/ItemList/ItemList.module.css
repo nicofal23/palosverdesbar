@@ -1,14 +1,17 @@
 .ListaGrupo {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1.25rem; 
   }
   
   .CardItem {
-    width: calc(33.33% - 10px); 
+    width: 100%; 
     margin-bottom: 20px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
 
@@ -16,8 +19,5 @@
   @media (max-width: 767px) {
     .ListaGrupo {
       flex-direction: column;
-    }
-    .CardItem { 
-      width: 100%;
     }
   }

@@ -61,11 +61,7 @@
 }
 
 
-@media (max-width: 767px) {
-    .CardItem {
-        width: 80%;
-    }
-}
+
 
 @media (max-width: 488px) {
     .ItemFooter{
