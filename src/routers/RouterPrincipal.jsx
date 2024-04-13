@@ -3,13 +3,15 @@ import ItemListContainer from "../components/ItemListCointainer/ItemListContaine
 import ItemDetailContainer from "../components/ItemDetailContainer/ItemDetailContainer";
 import { CartProvider } from "../context/CartContext";
 import FormularioCargaDatos from "../components/ProductComponent/FormularioCargaDatos.jsx"
+import Prueba from "../components/prueba/prueba.jsx";
 
 const RouterPrincipal = () => {
   return (
     <BrowserRouter>
       <CartProvider>
           <Routes>
-            <Route path="/" element={<ItemListContainer />} />
+            <Route path="/" element={<Prueba/>} />
+            <Route path="/category" element={<ItemListContainer />} />
             <Route path="/category/:categoryId" element={<ItemListContainer />}></Route>
             <Route path="/item/:itemId" element={<ItemDetailContainer />} />
             <Route path="/admin" element={<FormularioCargaDatos/>}/>
