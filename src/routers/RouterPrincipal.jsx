@@ -3,7 +3,7 @@ import ItemListContainer from "../components/ItemListCointainer/ItemListContaine
 import ItemDetailContainer from "../components/ItemDetailContainer/ItemDetailContainer";
 import { CartProvider } from "../context/CartContext";
 import FormularioCargaDatos from "../components/ProductComponent/FormularioCargaDatos.jsx"
-import Prueba from "../components/prueba/prueba.jsx";
+import Prueba from "../components/Inicio/Inicio.jsx";
 
 const RouterPrincipal = () => {
   return (
