@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate , useParams } from 'react-router-dom'; // Importar useNavigate  y useParams desde 'react-router-dom'
 import ItemList from '../ItemList/ItemList';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'; 
 import style from '../ItemListCointainer/ItemListContainer.module.css';
 import { getDocs, collection, query, where } from 'firebase/firestore';
 import { db } from '../../firebase/cliente';
-import { useParams } from 'react-router-dom';
 
 const ItemListContainer = ({ greeting }) => {
   const [productos, setProductos] = useState([]);
@@ -12,6 +12,7 @@ const ItemListContainer = ({ greeting }) => {
   const [selectedCategory, setSelectedCategory] = useState(null); 
   const [showButtons, setShowButtons] = useState(true); 
   const { categoryId } = useParams();
+  const history = useNavigate (); // Obtener el objeto history
 
   useEffect(() => {
     setLoading(true);
@@ -44,6 +45,7 @@ const ItemListContainer = ({ greeting }) => {
   const handleReturnClick = () => {
     setSelectedCategory(null);
     setShowButtons(true); 
+    history.goBack(); // Utilizar history.goBack() para volver atrás
   };
 
   return (
@@ -51,9 +53,7 @@ const ItemListContainer = ({ greeting }) => {
       <div className={style.row}>
         <div className={style.col}>
           <h2 className={`${style.mt5} ${style.greeting}`}>{greeting}</h2>
-          {/* Mostrar el spinner de carga mientras se cargan los productos */}
           {loading && <LoadingSpinner />}
-          {/* Interfaz para seleccionar la categoría */}
           <div className={style.categoryButtons} style={{ display: loading ? 'none' : 'block' }}>
             <div className={style.gridContainer}>
               {showButtons && (
@@ -72,7 +72,6 @@ const ItemListContainer = ({ greeting }) => {
                   </div>
                 </>
               )}
-              {/* Mostrar el botón "Volver" si hay una categoría seleccionada */}
               {!showButtons && (
                 <div>
                   <button className={style.button} onClick={handleReturnClick}>Volver</button>
@@ -80,11 +79,9 @@ const ItemListContainer = ({ greeting }) => {
               )}
             </div>
           </div>
-          {/* Mostrar los productos solo si hay productos disponibles */}
           {selectedCategory !== null && !loading && productos.length > 0 && (
             <ItemList productos={productos} />
           )}
-          {/* Mensaje de que no hay productos disponibles */}
           {selectedCategory !== null && !loading && productos.length === 0 && (
             <p>No hay productos disponibles en esta categoría.</p>
           )}
