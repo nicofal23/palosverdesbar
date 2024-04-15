@@ -1,50 +1,53 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './Prueba.css'; // Importa tu archivo de estilos CSS
-import { auth } from '../../firebase/cliente'; // Importa tu instancia de autenticación de Firebase
+import { Link, useNavigate } from 'react-router-dom';
+import './Prueba.css';
+import Modal from '../Modal/Modal';
+import { auth, signInWithEmailAndPassword } from '../../firebase/cliente';
 
 export default function Prueba() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false); // Estado para controlar la visibilidad del modal
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate(); // Obteniendo la función de navegación
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await auth.signInWithEmailAndPassword(email, password);
-      // Si el inicio de sesión es exitoso, redirige a "/admin" u otra ruta según sea necesario
-      // history.push('/admin');
-      setShowModal(false); // Oculta el modal después de iniciar sesión
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      // Redirige al usuario a la página de admin después de iniciar sesión exitosamente
+      navigate('/admin');
+      setShowModal(false);
     } catch (error) {
       setError(error.message);
     }
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
   };
 
   return (
     <div className="container">
       <h1>Prueba</h1>
       <div className="buttons-container">
-        {/* Botón para Mesas */}
         <button className="blue-button" onClick={() => setShowModal(true)}>Mesas</button>
-
-        {/* Botón para Carta */}
         <Link to="/category">
-          <button>Carta</button>
+          <button className="blue-button">Carta</button>
         </Link>
       </div>
-
-      {/* Modal de inicio de sesión */}
-      {showModal && (
-        <div className="modal">
-          <form className="login-form" onSubmit={handleLogin}>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Correo electrónico" required />
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" required />
-            <button type="submit">Iniciar sesión</button>
-            {error && <p>{error}</p>}
-          </form>
-        </div>
-      )}
+      
+      <Modal 
+        showModal={showModal}
+        handleClose={handleClose}
+        handleLogin={handleLogin}
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        error={error}
+      />
     </div>
   );
 }
