@@ -41,7 +41,7 @@ export default function Prueba() {
       </div>
       
       <Modal 
-        showModal={showModal}
+        showModal={showModal} 
         handleClose={handleClose}
         handleLogin={handleLogin}
         email={email}
