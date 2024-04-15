@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Prueba.css';
 import Modal from '../Modal/Modal';
 import { auth, signInWithEmailAndPassword } from '../../firebase/cliente';
+import FormularioCargaDatos from '../ProductComponent/FormularioCargaDatos';
 
 export default function Prueba() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false); // Estado para verificar si el usuario ha iniciado sesión
   const navigate = useNavigate(); // Obteniendo la función de navegación
 
   const handleLogin = async (e) => {
@@ -16,11 +18,11 @@ export default function Prueba() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      // Redirige al usuario a la página de admin después de iniciar sesión exitosamente
-      navigate('/admin');
+      // Actualiza el estado para indicar que el usuario ha iniciado sesión
+      setLoggedIn(true);
       setShowModal(false);
     } catch (error) {
-      setError(error.message);
+      setError('Usuario y/o contraseña incorrecto');
     }
   };
 
@@ -30,7 +32,7 @@ export default function Prueba() {
 
   return (
     <div className="container">
-      <h1>Prueba</h1>
+      <h2 className="titulo">Panel de usuario</h2>
       <div className="buttons-container">
         <button className="blue-button" onClick={() => setShowModal(true)}>Mesas</button>
         <Link to="/category">
@@ -48,6 +50,9 @@ export default function Prueba() {
         setPassword={setPassword}
         error={error}
       />
+      
+      {/* Renderiza el componente FormularioCargaDatos solo si el usuario ha iniciado sesión */}
+      {loggedIn && <FormularioCargaDatos />}
     </div>
   );
 }

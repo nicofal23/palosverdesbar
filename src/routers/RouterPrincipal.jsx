@@ -10,11 +10,10 @@ const RouterPrincipal = () => {
     <BrowserRouter>
       <CartProvider>
           <Routes>
-            <Route path="/" element={<Prueba/>} />
-            <Route path="/category" element={<ItemListContainer />} />
+            <Route path="/" element={<ItemListContainer/>} />
+            <Route path="/category" element={<Prueba />} />
             <Route path="/category/:categoryId" element={<ItemListContainer />}></Route>
             <Route path="/item/:itemId" element={<ItemDetailContainer />} />
-            <Route path="/admin" element={<FormularioCargaDatos/>}/>
           </Routes>
         </CartProvider>
     </BrowserRouter> 
