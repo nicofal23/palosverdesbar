@@ -34,8 +34,8 @@ export default function Prueba() {
     <div className="container">
       <h2 className="titulo">Panel de usuario</h2>
       <div className="buttons-container">
-        <button className="blue-button" onClick={() => setShowModal(true)}>Mesas</button>
-        <Link to="/category">
+        <button className="blue-button" onClick={() => setShowModal(true)}>Administración</button>
+        <Link to="/carta">
           <button className="blue-button">Carta</button>
         </Link>
       </div>
@@ -51,7 +51,6 @@ export default function Prueba() {
         error={error}
       />
       
-      {/* Renderiza el componente FormularioCargaDatos solo si el usuario ha iniciado sesión */}
       {loggedIn && <FormularioCargaDatos />}
     </div>
   );
