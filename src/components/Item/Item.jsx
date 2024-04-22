@@ -20,9 +20,7 @@ const Item = ({ id, nombre, img, precio, stock, descripcion}) => {
                     <p className={styles.Precio}>
                          ${precio} 
                     </p>
-                    <p className={styles.Info}>
-                         {stock}
-                    </p>
+                    
                 </section>
                 <footer className={styles.ItemFooter}>
                     {isStockAvailable ? (
