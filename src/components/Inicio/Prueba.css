@@ -28,3 +28,31 @@
 .titulo {
   color: white;
 }
+
+
+/* Prueba.css */
+.blue-button {
+  background-color: blue;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.admin-button {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.admin-button:last-child {
+  margin-right: 0; /* Elimina el margen derecho del último botón de administración */
+}
+
+.buttons-container {
+  margin-bottom: 20px; /* Agrega un espacio entre los botones y el resto del contenido */
+}

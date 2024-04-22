@@ -33,13 +33,15 @@ export default function Prueba() {
   return (
     <div className="container">
       <h2 className="titulo">Panel de usuario</h2>
-      <div className="buttons-container">
-        <button className="blue-button" onClick={() => setShowModal(true)}>Administración</button>
-        <Link to="/carta">
-          <button className="blue-button">Carta</button>
-        </Link>
-      </div>
-      
+      {!loggedIn && (
+        <div className="buttons-container">
+          <button className="blue-button" onClick={() => setShowModal(true)}>Administración</button>
+          <Link to="/carta">
+            <button className="blue-button">Carta</button>
+          </Link>
+        </div>
+      )}
+
       <Modal 
         showModal={showModal} 
         handleClose={handleClose}
@@ -49,9 +51,21 @@ export default function Prueba() {
         password={password}
         setPassword={setPassword}
         error={error}
-      />
+      /> 
       
-      {loggedIn && <FormularioCargaDatos />}
+      {loggedIn && (
+        <div className="buttons-container">
+          <Link to="/73K9pQzX5E"> 
+            <button className="admin-button">Agregar Producto</button>
+          </Link>
+          <Link to="/administrar-mesas">
+            <button className="admin-button">Administrar Mesas</button>
+          </Link>
+          <Link to="/R4s8W2nY6P">
+            <button className="admin-button">Modificar Productos</button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,0 +1,79 @@
+/* ModificarProductos.css */
+.productList {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.productItem {
+  margin: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  overflow: hidden;
+  width: 300px;
+}
+
+.productInfo {
+  flex: 1;
+  padding: 20px;
+}
+
+.productDescription {
+  margin-bottom: 10px;
+}
+
+.productName {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.productDetails {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.productPrice {
+  font-weight: bold;
+}
+
+.productStock {
+  color: #666;
+}
+
+.productFooter {
+  display: flex;
+  align-items: center;
+}
+
+.productFooter input[type="number"] {
+  margin-right: 10px;
+  padding: 5px;
+  width: 60px;
+}
+
+.productFooter button {
+  padding: 5px 10px;
+  background-color: #FF5722;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.productImage {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.productImg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
