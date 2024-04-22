@@ -1,18 +1,17 @@
 .CardItem {
+  display: flex;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 16px;
   margin: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  width: 100%; /* Tamaño fijo para el ancho */
+  height: 300px; /* Tamaño fijo para la altura */
 }
 
 .Description {
-  flex: 1; 
-  width: 70%;
+  flex: 1;
+  padding: 16px;
 }
 
 .Header {
@@ -20,17 +19,24 @@
 }
 
 .ItemHeader {
-  font-size: 1.5rem;
-  margin: 0; 
+  font-size: 17px;
+  padding: 5px;
+  margin: 0;
+  font-weight: bold;
+  color: #000;
 }
 
-.ItemImg { 
-  width: 100%;
-  border-radius: 4px;
+.ItemDescription {
+  font-size: 14px;
+  padding: 5px;
+  margin: 0;
+  color: #000;
 }
 
-.Info {
-  margin: 8px 0;
+.Precio {
+  font-size: 18px;
+  padding: 5px;
+  color: #ae8e4a;
 }
 
 .ItemFooter {
@@ -46,25 +52,44 @@
   border-radius: 4px;
   cursor: pointer;
   text-decoration: none;
-  width: 100%;
-  text-align: center;
-  display: none;
 }
 
 .OptionDisabled {
-  width: 100%;
+  background-color: #ccc;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: not-allowed;
 }
-
 
 .imga {
-  width: 30%;
-}
-.Precio{
-  font-size: 35px;
+  width: 50%; /* La imagen ocupa la mitad de la tarjeta */
+  height: 100%; /* La imagen ocupa toda la altura de la tarjeta */
 }
 
 .imga img {
-  width: 100%; 
+  width: 100%;
   height: 100%;
-  padding-left: 5px;
+  object-fit: cover; /* Ajusta la imagen para que ocupe todo el espacio sin deformarla */
+}
+
+.Option{
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .CardItem {
+    flex-direction: row;
+    height: auto; /* Cambia la altura a automática para que se ajuste al contenido */
+  }
+
+  .Description {
+    width: 100%;
+  }
+
+  .imga {
+    width: 40%;
+    height: 50%; /* Ajusta la altura de la imagen en dispositivos móviles */
+  }
 }

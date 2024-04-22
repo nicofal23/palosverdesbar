@@ -1,4 +1,4 @@
-//item.jsx
+// item.jsx
 import { Link } from 'react-router-dom';
 import styles from '../Item/Item.module.css';
 
@@ -12,16 +12,13 @@ const Item = ({ id, nombre, img, precio, stock, descripcion}) => {
                     <h2 className={styles.ItemHeader}>
                         {nombre}
                     </h2>
-                    <p className={styles.ItemHeader}>
+                    <p className={styles.ItemDescription}>
                          {descripcion}
                     </p>
-                </div>
-                <section> 
                     <p className={styles.Precio}>
                          ${precio} 
                     </p>
-                    
-                </section>
+                </div>
                 <footer className={styles.ItemFooter}>
                     {isStockAvailable ? (
                         <Link to={`/item/${id}`} className={styles.Option}>
