@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db, storage } from '../../firebase/cliente'; // Asegúrate de importar storage desde Firebase
-import { doc, getDocs, getDoc, updateDoc, deleteDoc, addDoc, collection } from 'firebase/firestore';
+import { doc, getDocs, getDoc, updateDoc, deleteDoc, addDoc, collection, query, where } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import styles from '../ModificarProductos/ModificarProductos.module.css';
 import SelectCategory from '../SelectProduct/SelectProduct';
