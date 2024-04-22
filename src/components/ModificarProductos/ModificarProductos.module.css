@@ -1,4 +1,4 @@
-/* ModificarProductos.css */
+/* ModificarProductos.module.css */
 .productList {
   display: flex;
   justify-content: center;
@@ -15,7 +15,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   overflow: hidden;
-  width: 300px;
+  width: 90%;
 }
 
 .productInfo {
@@ -46,15 +46,36 @@
   color: #666;
 }
 
-.productFooter {
+.stockOptions {
   display: flex;
   align-items: center;
 }
 
-.productFooter input[type="number"] {
-  margin-right: 10px;
+.stockBoxes {
+  display: flex;
+  margin: 5px;
+}
+
+.stockBox {
   padding: 5px;
-  width: 60px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.stockBox input[type="radio"] {
+  margin-left: 5px;
+}
+
+.available {
+  background-color: #a3e9a4;
+}
+
+.unavailable {
+  background-color: #ffcccc;
 }
 
 .productFooter button {
@@ -83,4 +104,8 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+}
+
+p{
+  margin: 2px;
 }

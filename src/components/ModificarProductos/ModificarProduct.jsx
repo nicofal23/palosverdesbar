@@ -53,16 +53,27 @@ const ModificarProductos = () => {
         );
     }
 
-    // Función para actualizar el stock del producto en Firebase
-    const actualizarStock = async (id, nuevoStock) => {
-        try {
-            const productoRef = doc(db, "productos", id);
-            await updateDoc(productoRef, { stock: nuevoStock });
-            console.log("Stock actualizado exitosamente.");
-        } catch (error) {
-            console.error("Error al actualizar el stock:", error);
-        }
+    // Función para actualizar el stock del producto en Firebase y en el estado local
+const actualizarStock = async (id, nuevoStock) => {
+    try {
+        const productoRef = doc(db, "productos", id);
+        await updateDoc(productoRef, { stock: nuevoStock });
+        // Actualizar el estado local de los productos
+        setProductos(prevProductos => {
+            return prevProductos.map(producto => {
+                if (producto.id === id) {
+                    return { ...producto, stock: nuevoStock };
+                } else {
+                    return producto;
+                }
+            });
+        });
+        console.log("Stock actualizado exitosamente.");
+    } catch (error) {
+        console.error("Error al actualizar el stock:", error);
     }
+}
+
 
     // Función para modificar el stock del producto en Firebase
     const modificarStock = async (id, nuevoStock) => {
@@ -136,22 +147,37 @@ const ModificarProductos = () => {
                                 <p className={styles.productPrice}>
                                     ${producto.precio}
                                 </p>
-                                <p className={styles.productStock}>
-                                    Stock: {producto.stock}
-                                    {/* Input para modificar stock */}
-                                    <input
-                                        type="number"
-                                        value={producto.stock}
-                                        onChange={(e) => {
-                                            const nuevoStock = parseInt(e.target.value);
-                                            if (!isNaN(nuevoStock)) {
-                                                actualizarStock(producto.id, nuevoStock);
-                                            }
-                                        }}
-                                    />
-                                    {/* Botón para modificar stock */}
-                                    <button onClick={() => modificarStock(producto.id, producto.stock)}>Modificar</button>
-                                </p>
+                                <div className={styles.stockOptions}>
+                                    <p>Stock:</p>
+                                    <div className={styles.stockBoxes}>
+                                        <div className={`${styles.stockBox} ${producto.stock > 0 ? styles.available : styles.unavailable}`}>
+                                            Si
+                                            <input
+                                                type="radio"
+                                                value="1"
+                                                checked={producto.stock > 0}
+                                                onChange={() => {
+                                                    if (producto.stock === 0) {
+                                                        actualizarStock(producto.id, 1);
+                                                    }
+                                                }}
+                                            />
+                                        </div>
+                                        <div className={`${styles.stockBox} ${producto.stock === 0 ? styles.available : styles.unavailable}`}>
+                                            No
+                                            <input
+                                                type="radio"
+                                                value="0"
+                                                checked={producto.stock === 0}
+                                                onChange={() => {
+                                                    if (producto.stock > 0) {
+                                                        actualizarStock(producto.id, 0);
+                                                    }
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </section>
                             {/* Botón para eliminar producto */}
                             <button onClick={() => eliminarProducto(producto.id, producto.img)}>Eliminar Producto</button>
