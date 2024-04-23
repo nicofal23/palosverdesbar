@@ -1,0 +1,11 @@
+/* ModificarPrecio.module.css */
+
+#swal2-input {
+    width: 87%; /* Ancho del input */
+    margin: 10px auto; /* Margen para centrar el input */
+    padding: 10px; /* Espaciado interno del input */
+    border: 1px solid #ccc; /* Borde del input */
+    border-radius: 5px; /* Borde redondeado del input */
+    font-size: 16px; /* Tamaño de fuente del input */
+  }
+  

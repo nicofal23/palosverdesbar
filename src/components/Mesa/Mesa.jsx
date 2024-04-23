@@ -1,7 +1,15 @@
+// Mesa.js
+
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase/cliente'; // Importa la referencia a la base de datos desde tu archivo cliente.js
+import MesaList from './MesaList';
+import Modal from './Modal';
 
 const Mesa = () => {
+  const [showMesaList, setShowMesaList] = useState(false);
+  const [selectedMesa, setSelectedMesa] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
   const [numeroMesa, setNumeroMesa] = useState('');
   const [nombreCliente, setNombreCliente] = useState('');
   const [mercaderia, setMercaderia] = useState([]);
@@ -35,70 +43,44 @@ const Mesa = () => {
     setTotal(totalCalculado);
   };
 
-  // Función para cerrar la mesa
-  const cerrarMesa = () => {
-    // Implementa la lógica para cerrar la mesa y guardar la información en Firebase
-    const mesaData = {
-      numeroMesa,
-      nombreCliente,
-      mercaderia,
-      total,
-      fecha: new Date().toISOString()
-    };
-
-    db.collection('mesas').add(mesaData)
-      .then(() => {
-        console.log('Mesa cerrada y guardada en Firebase');
-        // Limpiar el estado para una nueva mesa
-        setNumeroMesa('');
-        setNombreCliente('');
-        setMercaderia([]);
-        setTotal(0);
-      })
-      .catch(error => {
-        console.error('Error al cerrar la mesa y guardar en Firebase:', error);
-      });
+  const handleCrearMesaClick = () => {
+    setShowMesaList(true);
   };
 
-  // Función para cerrar el día
-  const cerrarDia = () => {
-    // Implementa la lógica para cerrar el día y guardar toda la información en Firebase
-    const diaData = {
-      // Datos del día (por ejemplo, todas las mesas cerradas en ese día)
-    };
+  const handleMesaClick = (mesa) => {
+    setSelectedMesa(mesa);
+    setModalIsOpen(true);
+  };
 
-    const fechaActual = new Date().toISOString().split('T')[0]; // Obtener la fecha actual en formato YYYY-MM-DD
-
-    db.collection('dias').doc(fechaActual).set(diaData)
-      .then(() => {
-        console.log('Día cerrado y guardado en Firebase');
-        // Puedes realizar otras operaciones necesarias después de cerrar el día
-      })
-      .catch(error => {
-        console.error('Error al cerrar el día y guardar en Firebase:', error);
-      });
+  const closeModal = () => {
+    setModalIsOpen(false);
   };
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Número de mesa"
-        value={numeroMesa}
-        onChange={e => setNumeroMesa(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Nombre del cliente"
-        value={nombreCliente}
-        onChange={e => setNombreCliente(e.target.value)}
-      />
-      {/* Aquí puedes mostrar la lista de mercadería y permitir al usuario agregar productos */}
-      {/* Muestra el total calculado */}
-      <div>Total: ${total}</div>
-      <button onClick={calcularTotal}>Calcular Total</button>
-      <button onClick={cerrarMesa}>Cerrar Mesa</button>
-      <button onClick={cerrarDia}>Cerrar Día</button>
+      {!showMesaList && (
+        <button onClick={handleCrearMesaClick}>Crear Mesa</button>
+      )}
+      {showMesaList && <MesaList onMesaClick={handleMesaClick} />}
+      {/* Resto del código del componente Mesa... */}
+
+      {selectedMesa && (
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          contentLabel="Detalles de la Mesa"
+        >
+          <h2>Mesa {selectedMesa.numeroMesa}</h2>
+          <ul>
+            {selectedMesa.mercaderia.map((item, index) => (
+              <li key={index}>{item.nombre} - ${item.precio}</li>
+            ))}
+          </ul>
+          <button onClick={closeModal}>Cerrar</button>
+          {/* Botones para agregar/quitar productos */}
+          {/* Implementa la lógica para agregar/quitar productos a la mesa */}
+        </Modal>
+      )}
     </div>
   );
 };

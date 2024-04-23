@@ -1,8 +1,9 @@
 import React from "react";
+import styles from '../SelectProduct/SelectCategory.module.css'
 
 const SelectCategory = ({ value, onChange }) => {
     return (
-        <div>
+        <div className={styles.Select}>
             <label htmlFor="categoria">Filtrar por categoría: </label>
             <select id="categoria" value={value} onChange={onChange}>
                 <option value="">Todos</option>

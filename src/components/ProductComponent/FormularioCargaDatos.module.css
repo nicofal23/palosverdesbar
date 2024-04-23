@@ -44,4 +44,17 @@
     background-color: #cccccc;
     cursor: not-allowed;
   }
-  
+  p{
+    color: white;
+  }
+
+  input{
+    margin: 5px;
+  }
+  .stock{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+}

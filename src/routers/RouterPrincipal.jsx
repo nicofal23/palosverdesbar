@@ -16,7 +16,7 @@ const RouterPrincipal = () => {
             <Route path="/" element={<ItemListContainer/>} />
             <Route path="/admin" element={<Prueba />} />
             <Route path="/carta" element={<ItemDetailContainer />} />
-            <Route path="/mesa" element={<Mesa />}/>
+            <Route path="/administrar-mesas" element={<Mesa />}/>
             <Route path="/73K9pQzX5E" element={<FormularioCargaDatos/>}/>
             <Route path="/R4s8W2nY6P" element={<ModificarProductos/>}/>
           </Routes>

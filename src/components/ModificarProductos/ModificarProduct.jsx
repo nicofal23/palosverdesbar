@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { db, storage } from '../../firebase/cliente'; // Asegúrate de importar storage desde Firebase
+import { db, storage, ref, deleteObject  } from '../../firebase/cliente'; // Asegúrate de importar storage desde Firebase
 import { doc, getDocs, getDoc, updateDoc, deleteDoc, addDoc, collection, query, where } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import styles from '../ModificarProductos/ModificarProductos.module.css';
 import SelectCategory from '../SelectProduct/SelectProduct';
-import { ref } from 'firebase/storage'; // Importa ref desde firebase/storage
+import Swal from 'sweetalert2';
+import ModificarPrecio from "../ModificarPrecio/ModificarPrecio";
+
+
 
 const ModificarProductos = () => {
     const [productos, setProductos] = useState([]);
@@ -94,34 +97,56 @@ const actualizarStock = async (id, nuevoStock) => {
     }
     
 
-    // Función para eliminar un producto de Firebase y su imagen del storage
-    const eliminarProducto = async (id, imagenURL) => {
+    const eliminarProducto = async (id) => {
         try {
-            // Parsear la URL de la imagen para obtener el nombre del archivo
-            const nombreArchivo = imagenURL.split('%2F').pop().split('?')[0];
-            
-            // Crear una referencia al objeto de almacenamiento basado en el nombre del archivo
-            const imagenRef = ref(storage, `productos/${nombreArchivo}`);
-            
-            // Eliminar el objeto de almacenamiento
-            await storage.deleteObject(imagenRef);
-
-            // Eliminar el producto de la base de datos
-            const productoRef = doc(db, "productos", id);
-            await deleteDoc(productoRef);
-
-            console.log("Producto eliminado exitosamente.");
+            // Mostrar mensaje de confirmación
+            const resultado = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Una vez eliminado, no podrás recuperar este producto.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            });
+    
+            // Si el usuario confirma la eliminación
+            if (resultado.isConfirmed) {
+                // Eliminar el producto de la base de datos
+                const productoRef = doc(db, "productos", id);
+                await deleteDoc(productoRef);
+    
+                // Actualizar el estado local de los productos eliminando el producto eliminado
+                setProductos(prevProductos => prevProductos.filter(producto => producto.id !== id));
+    
+                // Mostrar mensaje de éxito
+                Swal.fire(
+                    '¡Eliminado!',
+                    'El producto ha sido eliminado.',
+                    'success'
+                );
+            }
         } catch (error) {
             console.error("Error al eliminar el producto:", error);
+            // Mostrar mensaje de error
+            Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el producto.',
+                'error'
+            );
         }
     }
+    
 
     return (
         <div className={styles.container}>
-            <h2>Lista de Productos</h2>
+            <div className={styles.titulo}>
+                <h2>Lista de Productos</h2>
+            </div>
             <div className={styles.filtro}>
                 <SelectCategory value={categoriaSeleccionada} onChange={(e) => setCategoriaSeleccionada(e.target.value)} />
-                <div>
+                <div className={styles.inputt}>
                     <label htmlFor="search">Buscar por nombre: </label>
                     <input
                         type="text"
@@ -132,63 +157,68 @@ const actualizarStock = async (id, nuevoStock) => {
                 </div>
             </div>
             <ul className={styles.productList}>
-                {filtrarProductos().map(producto => (
-                    <li key={producto.id} className={styles.productItem}>
-                        <div className={styles.productInfo}>
-                            <div className={styles.productDescription}>
-                                <h2 className={styles.productName}>
-                                    {producto.nombre}
-                                </h2>
-                                <p className={styles.productDescription}>
-                                    {producto.descripcion}
-                                </p>
-                            </div>
-                            <section className={styles.productDetails}>
-                                <p className={styles.productPrice}>
-                                    ${producto.precio}
-                                </p>
-                                <div className={styles.stockOptions}>
-                                    <p>Stock:</p>
-                                    <div className={styles.stockBoxes}>
-                                        <div className={`${styles.stockBox} ${producto.stock > 0 ? styles.available : styles.unavailable}`}>
-                                            Si
-                                            <input
-                                                type="radio"
-                                                value="1"
-                                                checked={producto.stock > 0}
-                                                onChange={() => {
-                                                    if (producto.stock === 0) {
-                                                        actualizarStock(producto.id, 1);
-                                                    }
-                                                }}
-                                            />
-                                        </div>
-                                        <div className={`${styles.stockBox} ${producto.stock === 0 ? styles.available : styles.unavailable}`}>
-                                            No
-                                            <input
-                                                type="radio"
-                                                value="0"
-                                                checked={producto.stock === 0}
-                                                onChange={() => {
-                                                    if (producto.stock > 0) {
-                                                        actualizarStock(producto.id, 0);
-                                                    }
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
-                            {/* Botón para eliminar producto */}
-                            <button onClick={() => eliminarProducto(producto.id, producto.img)}>Eliminar Producto</button>
+               {filtrarProductos().map(producto => (
+    <li key={producto.id} className={styles.productItem}>
+        <div className={styles.productInfo}>
+            <div className={styles.productDescription}>
+                <h2 className={styles.productName}>
+                    {producto.nombre}
+                </h2>
+                <p className={styles.productDescription}>
+                    {producto.descripcion}
+                </p>
+            </div>
+            <section className={styles.productDetails}>
+                <div>
+                    <p className={styles.productPrice}>
+                        ${producto.precio}
+                    </p>
+                    {/* Renderizar el componente ModificarPrecio aquí */}
+                    <ModificarPrecio producto={producto} />
+                </div>
+                <div className={styles.stockOptions}>
+                    <p>Stock:</p>
+                    <div className={styles.stockBoxes}>
+                        <div className={`${styles.stockBox} ${producto.stock > 0 ? styles.available : styles.unavailable}`}>
+                            Si
+                            <input
+                                type="radio"
+                                value="1"
+                                checked={producto.stock > 0}
+                                onChange={() => {
+                                    if (producto.stock === 0) {
+                                        actualizarStock(producto.id, 1);
+                                    }
+                                }}
+                            />
                         </div>
-                        <div className={styles.productImage}>
-                            <picture>
-                                <img src={producto.img} alt={producto.nombre} className={styles.productImg} />
-                            </picture>
+                        <div className={`${styles.stockBox} ${producto.stock === 0 ? styles.available : styles.unavailable}`}>
+                            No
+                            <input
+                                type="radio"
+                                value="0"
+                                checked={producto.stock === 0}
+                                onChange={() => {
+                                    if (producto.stock > 0) {
+                                        actualizarStock(producto.id, 0);
+                                    }
+                                }}
+                            />
                         </div>
-                    </li>
-                ))}
+                    </div>
+                </div>
+            </section>
+            {/* Botón para eliminar producto */}
+            <button onClick={() => eliminarProducto(producto.id, producto.img)}>Eliminar Producto</button>
+        </div>
+        <div className={styles.productImage}>
+            <picture>
+                <img src={producto.img} alt={producto.nombre} className={styles.productImg} />
+            </picture>
+        </div>
+    </li>
+))}
+
             </ul>
         </div>
     );

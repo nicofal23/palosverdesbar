@@ -13,6 +13,7 @@ const FormularioCargaDatos = () => {
   const [precio, setPrecio] = useState('');
   const [tags, setTags] = useState([]); // Cambiado a un array para almacenar múltiples tags seleccionados
   const [loading, setLoading] = useState(false);
+  const [stock, setStock] = useState(0); // Estado para el stock
 
   const handleImgChange = (e) => {
     const file = e.target.files[0];
@@ -47,6 +48,7 @@ const FormularioCargaDatos = () => {
           img: imgUrl,
           nombre,
           precio,
+          stock, // Agregar el stock a la base de datos
           tags // Almacenar los tags en la base de datos
         });
         console.log('Document written with ID: ', docRef.id);
@@ -56,6 +58,7 @@ const FormularioCargaDatos = () => {
         setNombre('');
         setPrecio('');
         setTags([]);
+        setStock(0); // Restablecer el stock después de agregar el producto
       } else {
         console.error('Error: No se seleccionó ningún archivo de imagen.');
       }
@@ -65,6 +68,7 @@ const FormularioCargaDatos = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <form className={style.form} onSubmit={handleSubmit}>
@@ -146,6 +150,27 @@ const FormularioCargaDatos = () => {
            Cerveza
         </label>
         {/* Agregar el resto de las opciones de tags aquí */}
+      </div>
+      <div className={style.stock}>
+        <p>Stock:</p>
+        <label>
+          Sí
+          <input
+            type="radio"
+            value="1"
+            checked={stock === 1}
+            onChange={() => setStock(1)}
+          />
+        </label>
+        <label>
+          No
+          <input
+            type="radio"
+            value="0"
+            checked={stock === 0}
+            onChange={() => setStock(0)}
+          />
+        </label>
       </div>
       <button type="submit" disabled={loading}>Guardar</button>
     </form>
