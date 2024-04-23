@@ -191,22 +191,26 @@ h3 {
 
 .subnombreButtons {
   display: flex;
-  overflow-x: auto;
+  overflow-x: scroll; /* Cambiar de auto a scroll */
   white-space: nowrap;
   padding: 10px 0;
 }
 
+/* Estilo para ocultar la barra de desplazamiento en WebKit */
+.subnombreButtons::-webkit-scrollbar {
+  display: none; /* Ocultar la barra de desplazamiento */
+}
+
 .subnombreButton {
-  margin-right: 10px;
-  padding: 8px 16px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
+  color: #fff;
+  background-color: #212121;
+  border: 1px solid #fff;
+  padding: 0.2rem 0.7rem;
+  border-radius: 2rem;
 }
 
 .subnombreButton:hover {
-  background-color: #e0e0e0;
+  background-color: #8580805d;
 }
 
 .arrowButton {
@@ -230,7 +234,8 @@ h3 {
 .subnombreButtonsContainer {
   display: flex;
   align-items: center;
-  margin-bottom: 15px; /* Ajusta el margen inferior según sea necesario */
+  margin-bottom: 15px; 
+  justify-content: center;
 }
 
 .subnombreButtonsContainer {
@@ -248,13 +253,12 @@ h3 {
 }
 
 .subnombreButton {
-  color: black;
-    border-radius: 60%;
-  margin-right: 10px;
-  padding: 8px 16px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  cursor: pointer;
+  color: #fff;
+  background-color: #212121;
+  border: 1px solid #fff;
+  padding: 0.2rem 0.7rem;
+  border-radius: 2rem;
+  margin: 5px;
 }
 
 .arrowButton {
