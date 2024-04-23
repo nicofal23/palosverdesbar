@@ -189,6 +189,90 @@ h3 {
   width: 90%;
 }
 
+.subnombreButtons {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px 0;
+}
+
+.subnombreButton {
+  margin-right: 10px;
+  padding: 8px 16px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.subnombreButton:hover {
+  background-color: #e0e0e0;
+}
+
+.arrowButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  font-size: 24px;
+  display: none;
+}
+
+.arrowLeft {
+  margin-right: 10px;
+}
+
+.arrowRight {
+  margin-left: 10px;
+}
+
+
+.subnombreButtonsContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px; /* Ajusta el margen inferior según sea necesario */
+}
+
+.subnombreButtonsContainer {
+  width: 90%;
+  margin: 0 auto; /* Para centrar el contenedor */
+  overflow: hidden; /* Ocultar el desbordamiento horizontal */
+  margin-bottom: 15px;
+}
+
+.subnombreButtons {
+  margin: 10px;
+  display: flex;
+  padding: 0; /* Eliminar el relleno */
+  transition: transform 0.5s; /* Agregar una transición para el desplazamiento */
+}
+
+.subnombreButton {
+  color: black;
+    border-radius: 60%;
+  margin-right: 10px;
+  padding: 8px 16px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.arrowButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  font-size: 24px;
+}
+
+.arrowLeft {
+  margin-right: 10px;
+}
+
+.arrowRight {
+  margin-left: 10px;
+}
+
 @media screen and (max-width: 873px) {
   .gridItem {
     height: 150px;

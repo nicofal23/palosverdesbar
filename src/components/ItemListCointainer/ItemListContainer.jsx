@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getDocs, collection, query, where } from 'firebase/firestore';
 import { db } from '../../firebase/cliente';
@@ -11,9 +11,10 @@ const ItemListContainer = ({ greeting }) => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [showButtons, setShowButtons] = useState(true);
   const { categoryId } = useParams();
   const history = useNavigate();
+  const subnombreButtonsRef = useRef(null);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -50,12 +51,10 @@ const ItemListContainer = ({ greeting }) => {
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
-    setShowButtons(false);
   };
 
   const handleReturnClick = () => {
     setSelectedCategory(null);
-    setShowButtons(true);
     history.goBack();
   };
 
@@ -63,6 +62,13 @@ const ItemListContainer = ({ greeting }) => {
     const element = document.getElementById(subnombre);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const scroll = (scrollOffset) => {
+    if (subnombreButtonsRef.current) {
+      subnombreButtonsRef.current.style.transform = `translateX(${scrollOffset}px)`;
+      setScrollLeft(scrollLeft + scrollOffset);
     }
   };
 
@@ -74,7 +80,7 @@ const ItemListContainer = ({ greeting }) => {
           {loading && <LoadingSpinner />}
           <div className={style.categoryButtons} style={{ display: loading ? 'none' : 'block' }}>
             <div className={style.gridContainer}>
-              {showButtons && (
+              {selectedCategory === null && (
                 <>
                   <div className={`${style.gridItem} ${style.resto}`} onClick={() => handleCategoryClick('restaurant')}>
                     <button className={style.button}>Restaurant</button>
@@ -90,7 +96,7 @@ const ItemListContainer = ({ greeting }) => {
                   </div>
                 </>
               )}
-              {!showButtons && (
+              {selectedCategory !== null && (
                 <div>
                   <button className={style.buttonreturn} onClick={handleReturnClick}>Volver</button>
                 </div>
@@ -100,12 +106,20 @@ const ItemListContainer = ({ greeting }) => {
           
           {/* Aquí creamos los botones de los subnombres */}
           {selectedCategory !== null && !loading && productos.length > 0 && (
-            <div className={style.subnombreButtons}>
-              {productos.map((grupo) => (
-                <button key={grupo.subnombre} onClick={() => handleSubnombreClick(grupo.subnombre)}>
-                  {grupo.subnombre}
-                </button>
-              ))}
+            <div className={style.subnombreButtonsContainer}>
+              <button className={`${style.arrowButton} ${style.arrowLeft}`} onClick={() => scroll(-100)} disabled={scrollLeft === 0}>
+                {'<'}
+              </button>
+              <div className={style.subnombreButtons} ref={subnombreButtonsRef}>
+                {productos.map((grupo) => (
+                  <button key={grupo.subnombre} className={style.subnombreButton} onClick={() => handleSubnombreClick(grupo.subnombre)}>
+                    {grupo.subnombre}
+                  </button>
+                ))}
+              </div>
+              <button className={`${style.arrowButton} ${style.arrowRight}`} onClick={() => scroll(100)} disabled={scrollLeft >= subnombreButtonsRef.current?.scrollWidth - subnombreButtonsRef.current?.clientWidth}>
+                {'>'}
+              </button>
             </div>
           )}
 
