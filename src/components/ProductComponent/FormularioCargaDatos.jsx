@@ -7,6 +7,7 @@ import { storage } from '../../firebase/cliente';
 
 const FormularioCargaDatos = () => {
   const [category, setCategory] = useState('');
+  const [subnombre, setSubnombre] = useState(''); // Estado para el subnombre
   const [descripcion, setDescripcion] = useState('');
   const [img, setImg] = useState(null); 
   const [nombre, setNombre] = useState('');
@@ -44,6 +45,7 @@ const FormularioCargaDatos = () => {
         const imgUrl = await getDownloadURL(storageRef);
         const docRef = await addDoc(collection(db, 'productos'), {
           category,
+          subnombre, // Agregar el subnombre a la base de datos
           descripcion,
           img: imgUrl,
           nombre,
@@ -53,6 +55,7 @@ const FormularioCargaDatos = () => {
         });
         console.log('Document written with ID: ', docRef.id);
         setCategory('');
+        setSubnombre('');
         setDescripcion('');
         setImg(null);
         setNombre('');
@@ -69,6 +72,13 @@ const FormularioCargaDatos = () => {
     }
   };
 
+  // Opciones de subnombre según la categoría seleccionada
+  const subnombreOptions = {
+    restaurant: ['entrada', 'ensalada', 'pastas', 'carnes', 'woks', 'sándwich', 'postres', 'bebidas sin alcohol', 'bebidas con alcohol'],
+    cafeteria: ['desayuno y merienda', 'tortas', 'cafetería clásica'],
+    vinos: ['champagne', 'vinos'],
+    cocktails: ['aperitivos', 'campari', 'gin', 'otros']
+  };
 
   return (
     <form className={style.form} onSubmit={handleSubmit}>
@@ -82,6 +92,18 @@ const FormularioCargaDatos = () => {
           <option value="vinos">Vinos</option>
         </select>
       </label>
+      {/* Agregar el select para subnombre */}
+      {category && (
+        <label>
+          Subnombre:
+          <select value={subnombre} onChange={(e) => setSubnombre(e.target.value)}>
+            <option value="">Selecciona un subnombre</option>
+            {subnombreOptions[category].map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </label>
+      )}
       <label>
         Descripción:
         <textarea value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
@@ -101,55 +123,7 @@ const FormularioCargaDatos = () => {
       <div>
         <p>Tags:</p>
         {/* Renderizar las cajas de opción para los tags */}
-        <label>
-          <input type="checkbox" value="entrada" checked={tags.includes('entrada')} onChange={handleTagChange} />
-           Entrada
-        </label>
-        <label>
-          <input type="checkbox" value="carnes" checked={tags.includes('carnes')} onChange={handleTagChange} />
-           Carnes
-        </label>
-        <label>
-          <input type="checkbox" value="ensalada" checked={tags.includes('ensalada')} onChange={handleTagChange} />
-           Ensalada
-        </label>
-        <label>
-          <input type="checkbox" value="pastas" checked={tags.includes('pastas')} onChange={handleTagChange} />
-           Pastas
-        </label>
-        <label>
-          <input type="checkbox" value="woks" checked={tags.includes('woks')} onChange={handleTagChange} />
-           Woks
-        </label>
-        <label>
-          <input type="checkbox" value="sandwich" checked={tags.includes('sandwich')} onChange={handleTagChange} />
-           Sándwiches
-        </label>
-        <label>
-          <input type="checkbox" value="postres" checked={tags.includes('postres')} onChange={handleTagChange} />
-           Postres
-        </label>
-        <label>
-          <input type="checkbox" value="cafeteria" checked={tags.includes('cafeteria')} onChange={handleTagChange} />
-           cafetria
-        </label>
-        <label>
-          <input type="checkbox" value="gaseosa" checked={tags.includes('gaseosa')} onChange={handleTagChange} />
-           Gaseosa
-        </label>
-        <label>
-          <input type="checkbox" value="jugos" checked={tags.includes('jugos')} onChange={handleTagChange} />
-           Jugos y Licuados
-        </label>
-        <label>
-          <input type="checkbox" value="limonada" checked={tags.includes('limonada')} onChange={handleTagChange} />
-           Limonadas
-        </label>
-        <label>
-          <input type="checkbox" value="cerveza" checked={tags.includes('cerveza')} onChange={handleTagChange} />
-           Cerveza
-        </label>
-        {/* Agregar el resto de las opciones de tags aquí */}
+        {/* Código de los tags... */}
       </div>
       <div className={style.stock}>
         <p>Stock:</p>
