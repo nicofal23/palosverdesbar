@@ -153,6 +153,14 @@
   border-radius: 5%;
 }
 
+h3 {
+  text-align: center; /* Para centrar el texto */
+  color: #fffafa; /* Color del texto */
+  font-size: 1.5rem; /* Tamaño de fuente */
+  /* Agrega más estilos según tus preferencias */
+}
+
+
 @media screen and (max-width: 873px) {
   .gridItem {
     height: 150px;

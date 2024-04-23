@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate , useParams } from 'react-router-dom'; // Importar useNavigate  y useParams desde 'react-router-dom'
-import ItemList from '../ItemList/ItemList';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'; 
-import style from '../ItemListCointainer/ItemListContainer.module.css';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getDocs, collection, query, where } from 'firebase/firestore';
 import { db } from '../../firebase/cliente';
+import { groupBy } from 'lodash'; // Importar groupBy desde lodash
+import ItemList from '../ItemList/ItemList';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import style from '../ItemListCointainer/ItemListContainer.module.css';
 
 const ItemListContainer = ({ greeting }) => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState(null); 
-  const [showButtons, setShowButtons] = useState(true); 
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [showButtons, setShowButtons] = useState(true);
   const { categoryId } = useParams();
-  const history = useNavigate (); // Obtener el objeto history
+  const history = useNavigate();
 
   useEffect(() => {
     setLoading(true);
 
-    const collectionRef = selectedCategory 
+    const collectionRef = selectedCategory
       ? query(collection(db, 'productos'), where('category', '==', selectedCategory))
       : collection(db, 'productos');
 
@@ -27,7 +28,17 @@ const ItemListContainer = ({ greeting }) => {
           const data = doc.data();
           return { id: doc.id, ...data };
         });
-        setProductos(productosAdapted);
+
+        // Agrupar los productos por subnombre
+        const groupedProductos = groupBy(productosAdapted, 'subnombre');
+
+        // Transformar el objeto agrupado en un array de objetos
+        const groupedProductosArray = Object.keys(groupedProductos).map((subnombre) => ({
+          subnombre,
+          productos: groupedProductos[subnombre],
+        }));
+
+        setProductos(groupedProductosArray);
       })
       .catch((error) => {
         console.log(error);
@@ -35,17 +46,17 @@ const ItemListContainer = ({ greeting }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [selectedCategory]); 
+  }, [selectedCategory]);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
-    setShowButtons(false); 
+    setShowButtons(false);
   };
 
   const handleReturnClick = () => {
     setSelectedCategory(null);
-    setShowButtons(true); 
-    history.goBack(); // Utilizar history.goBack() para volver atrás
+    setShowButtons(true);
+    history.goBack();
   };
 
   return (
@@ -80,7 +91,12 @@ const ItemListContainer = ({ greeting }) => {
             </div>
           </div>
           {selectedCategory !== null && !loading && productos.length > 0 && (
-            <ItemList productos={productos} />
+            productos.map((grupo) => (
+              <div key={grupo.subnombre}>
+                <h3>{grupo.subnombre}</h3>
+                <ItemList productos={grupo.productos} />
+              </div>
+            ))
           )}
           {selectedCategory !== null && !loading && productos.length === 0 && (
             <p>No hay productos disponibles en esta categoría.</p>
