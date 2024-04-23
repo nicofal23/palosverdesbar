@@ -34,9 +34,11 @@
 }
 
 .Precio {
-  font-size: 18px;
-  padding: 5px;
   color: #ae8e4a;
+  line-height: 1.25;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: left;
 }
 
 .ItemFooter {

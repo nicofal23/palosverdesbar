@@ -59,6 +59,13 @@ const ItemListContainer = ({ greeting }) => {
     history.goBack();
   };
 
+  const handleSubnombreClick = (subnombre) => {
+    const element = document.getElementById(subnombre);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div className={style.container}>
       <div className={style.row}>
@@ -85,15 +92,27 @@ const ItemListContainer = ({ greeting }) => {
               )}
               {!showButtons && (
                 <div>
-                  <button className={style.button} onClick={handleReturnClick}>Volver</button>
+                  <button className={style.buttonreturn} onClick={handleReturnClick}>Volver</button>
                 </div>
               )}
             </div>
           </div>
+          
+          {/* Aquí creamos los botones de los subnombres */}
+          {selectedCategory !== null && !loading && productos.length > 0 && (
+            <div className={style.subnombreButtons}>
+              {productos.map((grupo) => (
+                <button key={grupo.subnombre} onClick={() => handleSubnombreClick(grupo.subnombre)}>
+                  {grupo.subnombre}
+                </button>
+              ))}
+            </div>
+          )}
+
           {selectedCategory !== null && !loading && productos.length > 0 && (
             productos.map((grupo) => (
-              <div key={grupo.subnombre}>
-                <h3>{grupo.subnombre}</h3>
+              <div key={grupo.subnombre} className={style.subnombre}>
+                <h3 id={grupo.subnombre}>{grupo.subnombre}</h3>
                 <ItemList productos={grupo.productos} />
               </div>
             ))
