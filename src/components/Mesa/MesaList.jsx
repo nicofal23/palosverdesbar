@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/cliente';
 import styles from './MesaCard.module.css'; // Importa los estilos de la tarjeta de mesa
+import { Link } from 'react-router-dom'; // Importa Link desde react-router-dom
 
 const MesaList = ({ onMesaClick }) => {
   const [mesasAbiertas, setMesasAbiertas] = useState([]);
@@ -49,17 +50,16 @@ const MesaList = ({ onMesaClick }) => {
           {mesasAbiertas.length > 0 && (
             <div>
               <h3>Mesas abiertas</h3>
-              <div className={styles.mesaConteiner}>
+              <div className={styles.mesaContainer}>
                 {mesasAbiertas.map(mesa => (
-                  <div
-                    key={mesa.id}
-                    className={`${styles.mesaCard} ${styles.abierto}`}
-                    onClick={() => onMesaClick(mesa)}
-                  >
-                    <p>Mesa {mesa.numeroMesa}</p>
-                    <p>{mesa.createdAt ? `Creada el: ${mesa.createdAt.toLocaleString()}` : 'Fecha de creación no disponible'}</p>
-                    <p>Abierta</p>
-                  </div>
+                  <Link key={mesa.id} to={`/mesa/${mesa.id}`} state={{ numeroMesa: mesa.numeroMesa }}>
+                    {/* Utiliza el ID de la mesa en la URL */}
+                    <div className={`${styles.mesaCard} ${styles.abierto}`}>
+                      <p>Mesa {mesa.numeroMesa}</p>
+                      <p>{mesa.createdAt ? `Creada el: ${mesa.createdAt.toLocaleString()}` : 'Fecha de creación no disponible'}</p>
+                      <p>Abierta</p>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -67,17 +67,16 @@ const MesaList = ({ onMesaClick }) => {
           {mesasCerradas.length > 0 && (
             <div>
               <h3>Mesas cerradas</h3>
-              <div className={styles.mesaConteiner}>
+              <div className={styles.mesaContainer}>
                 {mesasCerradas.map(mesa => (
-                  <div
-                    key={mesa.id}
-                    className={`${styles.mesaCard} ${styles.cerrado}`}
-                    onClick={() => onMesaClick(mesa)}
-                  >
-                    <p>Mesa {mesa.numeroMesa}</p>
-                    <p>{mesa.createdAt ? `Creada el: ${mesa.createdAt.toLocaleString()}` : 'Fecha de creación no disponible'}</p>
-                    <p>Cerrada</p>
-                  </div>
+                  <Link key={mesa.id} to={`/mesa/${mesa.id}`} state={{ numeroMesa: mesa.numeroMesa }}>
+                    {/* Utiliza el ID de la mesa en la URL */}
+                    <div className={`${styles.mesaCard} ${styles.cerrado}`}>
+                      <p>Mesa {mesa.numeroMesa}</p>
+                      <p>{mesa.createdAt ? `Creada el: ${mesa.createdAt.toLocaleString()}` : 'Fecha de creación no disponible'}</p>
+                      <p>Cerrada</p>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </div>
