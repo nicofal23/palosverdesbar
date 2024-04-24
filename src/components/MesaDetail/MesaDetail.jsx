@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/cliente';
+import { useParams } from 'react-router-dom';
+import { Timestamp } from 'firebase/firestore';
 
-const MesaDetail = ({ mesaId }) => {
-  console.log(mesaId)
+const MesaDetail = () => {
+  const { id } = useParams(); // Obtener el id de los parámetros de la URL
+  console.log(id);
   const [mesa, setMesa] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -11,7 +14,7 @@ const MesaDetail = ({ mesaId }) => {
     const fetchMesa = async () => {
       try {
         setLoading(true);
-        const mesaRef = doc(db, 'mesas', mesaId);
+        const mesaRef = doc(db, 'mesas', id);
         const mesaDoc = await getDoc(mesaRef);
 
         if (mesaDoc.exists()) {
@@ -31,7 +34,7 @@ const MesaDetail = ({ mesaId }) => {
     };
 
     fetchMesa();
-  }, [mesaId]);
+  }, [id]);
 
   return (
     <div>
@@ -40,7 +43,7 @@ const MesaDetail = ({ mesaId }) => {
       ) : mesa ? (
         <div>
           <p>Número de Mesa: {mesa.numeroMesa}</p>
-          <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
+          <p>Fecha de Creación: {mesa.createdAt ? new Date(mesa.createdAt.seconds * 1000).toLocaleString() : 'No disponible'}</p>
           <p>Productos: {mesa.productos}</p>
           <p>Estado: {mesa.estado ? 'Abierta' : 'Cerrada'}</p>
         </div>

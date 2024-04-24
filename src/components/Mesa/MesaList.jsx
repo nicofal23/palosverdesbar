@@ -4,6 +4,7 @@ import { db } from '../../firebase/cliente';
 import styles from '../MesaDetail/MesaCard.module.css';
 import { Link } from 'react-router-dom';
 
+
 const MesaList = () => {
   const [mesas, setMesas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,7 +50,7 @@ const MesaList = () => {
                 <p>Número de Mesa: {mesa.numeroMesa}</p>
                 <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
                 <p>Productos: {mesa.productos}</p>
-                <Link to={`/mesa/${mesa.id}`}>Ver Detalle</Link>
+                <Link to={`/mesa/${mesa.id}`}>Ver Detalle</Link> 
               </div>
             ))}
           </div>
@@ -59,7 +60,7 @@ const MesaList = () => {
               <div key={mesa.id} className={styles.mesaCard}>
                 <p>Número de Mesa: {mesa.numeroMesa}</p>
                 <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
-                <Link to={`/mesa/${mesa.id}`}>Ver Detalle</Link>
+                <Link to={`/mesa/${mesa.id}`}>Ver Detalle</Link> {/* No necesitas pasar id como prop */}
               </div>
             ))}
           </div>
@@ -70,4 +71,3 @@ const MesaList = () => {
 };
 
 export default MesaList;
-
