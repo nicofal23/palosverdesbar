@@ -1,14 +1,11 @@
-// Mesa.js
-
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase/cliente'; // Importa la referencia a la base de datos desde tu archivo cliente.js
-import MesaList from './MesaList';
-import Modal from './Modal';
+import { Link } from 'react-router-dom';
 
 const Mesa = () => {
   const [showMesaList, setShowMesaList] = useState(false);
   const [selectedMesa, setSelectedMesa] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  
 
   const [numeroMesa, setNumeroMesa] = useState('');
   const [nombreCliente, setNombreCliente] = useState('');
@@ -43,8 +40,12 @@ const Mesa = () => {
     setTotal(totalCalculado);
   };
 
-  const handleCrearMesaClick = () => {
+  const handleAbrirMesaClick = () => {
     setShowMesaList(true);
+  };
+
+  const handleVerMesasAbiertasClick = () => {
+    setShowMesaList(true); // Cambia esto según tu lógica para mostrar las mesas abiertas
   };
 
   const handleMesaClick = (mesa) => {
@@ -58,29 +59,12 @@ const Mesa = () => {
 
   return (
     <div>
-      {!showMesaList && (
-        <button onClick={handleCrearMesaClick}>Crear Mesa</button>
-      )}
-      {showMesaList && <MesaList onMesaClick={handleMesaClick} />}
-      {/* Resto del código del componente Mesa... */}
-
-      {selectedMesa && (
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          contentLabel="Detalles de la Mesa"
-        >
-          <h2>Mesa {selectedMesa.numeroMesa}</h2>
-          <ul>
-            {selectedMesa.mercaderia.map((item, index) => (
-              <li key={index}>{item.nombre} - ${item.precio}</li>
-            ))}
-          </ul>
-          <button onClick={closeModal}>Cerrar</button>
-          {/* Botones para agregar/quitar productos */}
-          {/* Implementa la lógica para agregar/quitar productos a la mesa */}
-        </Modal>
-      )}
+      <Link to="/abrir-mesa">
+        <button onClick={handleAbrirMesaClick}>Abrir Mesa</button>
+      </Link>
+      <Link to="/mesas-abiertas">
+        <button onClick={handleVerMesasAbiertasClick}>Ver Mesas Abiertas</button>
+      </Link>
     </div>
   );
 };

@@ -1,39 +1,89 @@
-// MesaList.js
-
 import React, { useState, useEffect } from 'react';
-import { db } from '../../firebase/cliente'; // Importa la referencia a la base de datos desde tu archivo cliente.js
+import { collection, query, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase/cliente';
+import styles from './MesaCard.module.css'; // Importa los estilos de la tarjeta de mesa
 
 const MesaList = ({ onMesaClick }) => {
-  const [mesas, setMesas] = useState([]);
+  const [mesasAbiertas, setMesasAbiertas] = useState([]);
+  const [mesasCerradas, setMesasCerradas] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Función para cargar todas las mesas desde Firebase
-    const cargarMesas = async () => {
+    setLoading(true);
+
+    const fetchMesas = async () => {
       try {
-        const mesasData = []; // Aquí almacenaremos los datos de las mesas
-        const querySnapshot = await db.collection('mesas').get(); // Consulta la colección 'mesas' en Firestore
-        querySnapshot.forEach(doc => {
-          mesasData.push({ id: doc.id, ...doc.data() }); // Agrega los datos del documento a la lista de mesas
-        });
-        setMesas(mesasData); // Actualiza el estado con las mesas cargadas desde Firebase
+        const mesaCollectionRef = collection(db, 'mesas');
+        const mesaQuery = query(mesaCollectionRef);
+        const querySnapshot = await getDocs(mesaQuery);
+
+        const mesas = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          numeroMesa: doc.data().numeroMesa,
+          createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : null,
+          estado: doc.data().estado // Asegúrate de tener el campo "estado" en tu documento de mesa
+        }));
+
+        const mesasAbiertas = mesas.filter(mesa => mesa.estado);
+        const mesasCerradas = mesas.filter(mesa => !mesa.estado);
+
+        setMesasAbiertas(mesasAbiertas);
+        setMesasCerradas(mesasCerradas);
       } catch (error) {
-        console.error('Error al cargar las mesas:', error);
+        console.error('Error fetching mesas:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    cargarMesas();
+    fetchMesas();
   }, []);
 
   return (
     <div>
       <h2>Mesas</h2>
-      <ul>
-        {mesas.map(mesa => (
-          <li key={mesa.id} onClick={() => onMesaClick(mesa)}>
-            Mesa {mesa.numeroMesa}
-          </li>
-        ))}
-      </ul>
+      {loading ? (
+        <p>Cargando mesas...</p>
+      ) : (
+        <div>
+          {mesasAbiertas.length > 0 && (
+            <div>
+              <h3>Mesas abiertas</h3>
+              <div className={styles.mesaConteiner}>
+                {mesasAbiertas.map(mesa => (
+                  <div
+                    key={mesa.id}
+                    className={`${styles.mesaCard} ${styles.abierto}`}
+                    onClick={() => onMesaClick(mesa)}
+                  >
+                    <p>Mesa {mesa.numeroMesa}</p>
+                    <p>{mesa.createdAt ? `Creada el: ${mesa.createdAt.toLocaleString()}` : 'Fecha de creación no disponible'}</p>
+                    <p>Abierta</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {mesasCerradas.length > 0 && (
+            <div>
+              <h3>Mesas cerradas</h3>
+              <div className={styles.mesaConteiner}>
+                {mesasCerradas.map(mesa => (
+                  <div
+                    key={mesa.id}
+                    className={`${styles.mesaCard} ${styles.cerrado}`}
+                    onClick={() => onMesaClick(mesa)}
+                  >
+                    <p>Mesa {mesa.numeroMesa}</p>
+                    <p>{mesa.createdAt ? `Creada el: ${mesa.createdAt.toLocaleString()}` : 'Fecha de creación no disponible'}</p>
+                    <p>Cerrada</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
