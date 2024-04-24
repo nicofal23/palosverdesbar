@@ -1,48 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../firebase/cliente'; // Importa la referencia a la base de datos desde tu archivo cliente.js
+import { collection, query, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase/cliente';
+import styles from './MesaCard.module.css'; // Importa los estilos de la tarjeta de mesa
+import MesaDetailModal from './MesaDetailModal'; // Importa el componente MesaDetailModal
 
-const MesaDetail = ({ id }) => {
-  const [mesa, setMesa] = useState(null);
+const MesaList = () => {
+  const [mesas, setMesas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedMesaId, setSelectedMesaId] = useState(null);
 
   useEffect(() => {
-    const fetchMesa = async () => {
-        try {
-          setLoading(true);
-          console.log('ID:', id);
-          const mesaDoc = await getDoc(doc(db, 'mesas', id)); // Aquí se usa el ID pasado como argumento
-          if (mesaDoc.exists()) {
-            setMesa({ id: mesaDoc.id, ...mesaDoc.data() });
-          } else {
-            console.log('No existe la mesa con el ID proporcionado');
-          }
-        } catch (error) {
-          console.error('Error al obtener los detalles de la mesa:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
+    const fetchMesas = async () => {
+      try {
+        setLoading(true);
+        const mesaCollectionRef = collection(db, 'mesas');
+        const mesaQuery = query(mesaCollectionRef);
+        const querySnapshot = await getDocs(mesaQuery);
 
-    fetchMesa();
-  }, [id]);
+        const mesasData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          numeroMesa: doc.data().numeroMesa,
+          createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : null,
+        }));
 
-  if (loading) {
-    return <p>Cargando detalles de la mesa...</p>;
-  }
+        setMesas(mesasData);
+      } catch (error) {
+        console.error('Error fetching mesas:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!mesa) {
-    return <p>No se encontraron detalles de la mesa.</p>;
-  }
+    fetchMesas();
+  }, []);
+
+  const handleVerDetalle = (mesaId) => {
+    setSelectedMesaId(mesaId);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedMesaId(null);
+  };
 
   return (
     <div>
-      <h2>Detalle de la mesa</h2>
-      <p>Número de mesa: {mesa.numeroMesa}</p>
-      {/* Muestra otros detalles de la mesa según la estructura de tu documento en Firebase */}
-      <p>Estado: {mesa.estado ? 'Abierta' : 'Cerrada'}</p>
+      <h2>Mesas</h2>
+      {loading ? (
+        <p>Cargando mesas...</p>
+      ) : (
+        <div className={styles.mesaContainer}>
+          {mesas.map(mesa => (
+            <div key={mesa.id} className={styles.mesaCard}>
+              <p>Número de Mesa: {mesa.numeroMesa}</p>
+              <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
+              <button onClick={() => handleVerDetalle(mesa.id)}>Ver Detalle</button>
+            </div>
+          ))}
+        </div>
+      )}
+      {selectedMesaId && (
+        <MesaDetailModal mesaId={selectedMesaId} onClose={handleCloseModal} />
+      )}
     </div>
   );
 };
 
-export default MesaDetail;
+export default MesaList;

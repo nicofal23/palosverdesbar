@@ -1,0 +1,13 @@
+
+.mesaContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mesaCard {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+}
