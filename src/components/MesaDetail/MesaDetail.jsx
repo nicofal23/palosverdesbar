@@ -1,68 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/cliente';
-import styles from './MesaCard.module.css'; // Importa los estilos de la tarjeta de mesa
-import MesaDetailModal from './MesaDetailModal'; // Importa el componente MesaDetailModal
 
-const MesaList = () => {
-  const [mesas, setMesas] = useState([]);
+const MesaDetail = ({ mesaId }) => {
+  console.log(mesaId)
+  const [mesa, setMesa] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedMesaId, setSelectedMesaId] = useState(null);
 
   useEffect(() => {
-    const fetchMesas = async () => {
+    const fetchMesa = async () => {
       try {
         setLoading(true);
-        const mesaCollectionRef = collection(db, 'mesas');
-        const mesaQuery = query(mesaCollectionRef);
-        const querySnapshot = await getDocs(mesaQuery);
+        const mesaRef = doc(db, 'mesas', mesaId);
+        const mesaDoc = await getDoc(mesaRef);
 
-        const mesasData = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          numeroMesa: doc.data().numeroMesa,
-          createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : null,
-        }));
-
-        setMesas(mesasData);
+        if (mesaDoc.exists()) {
+          const mesaData = {
+            id: mesaDoc.id,
+            ...mesaDoc.data()
+          };
+          setMesa(mesaData);
+        } else {
+          console.log('No existe la mesa con el ID proporcionado');
+        }
       } catch (error) {
-        console.error('Error fetching mesas:', error);
+        console.error('Error al obtener la mesa:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMesas();
-  }, []);
-
-  const handleVerDetalle = (mesaId) => {
-    setSelectedMesaId(mesaId);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedMesaId(null);
-  };
+    fetchMesa();
+  }, [mesaId]);
 
   return (
     <div>
-      <h2>Mesas</h2>
       {loading ? (
-        <p>Cargando mesas...</p>
-      ) : (
-        <div className={styles.mesaContainer}>
-          {mesas.map(mesa => (
-            <div key={mesa.id} className={styles.mesaCard}>
-              <p>Número de Mesa: {mesa.numeroMesa}</p>
-              <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
-              <button onClick={() => handleVerDetalle(mesa.id)}>Ver Detalle</button>
-            </div>
-          ))}
+        <p>Cargando detalles de la mesa...</p>
+      ) : mesa ? (
+        <div>
+          <p>Número de Mesa: {mesa.numeroMesa}</p>
+          <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
+          <p>Productos: {mesa.productos}</p>
+          <p>Estado: {mesa.estado ? 'Abierta' : 'Cerrada'}</p>
         </div>
-      )}
-      {selectedMesaId && (
-        <MesaDetailModal mesaId={selectedMesaId} onClose={handleCloseModal} />
+      ) : (
+        <p>No se encontró la mesa</p>
       )}
     </div>
   );
 };
 
-export default MesaList;
+export default MesaDetail;

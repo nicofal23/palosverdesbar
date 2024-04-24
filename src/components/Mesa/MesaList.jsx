@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/cliente';
-import styles from '../MesaDetail/MesaCard.module.css'; // Importa el archivo de estilos CSS modules
-import MesaDetailModal from '../MesaDetail/MesaDetailModal';
+import styles from '../MesaDetail/MesaCard.module.css';
+import { Link } from 'react-router-dom';
 
 const MesaList = () => {
   const [mesas, setMesas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedMesaId, setSelectedMesaId] = useState(null);
 
   useEffect(() => {
     const fetchMesas = async () => {
@@ -21,6 +20,7 @@ const MesaList = () => {
           id: doc.id,
           numeroMesa: doc.data().numeroMesa,
           createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : null,
+          productos: doc.data().productos,
           estado: doc.data().estado
         }));
 
@@ -35,14 +35,6 @@ const MesaList = () => {
     fetchMesas();
   }, []);
 
-  const handleVerDetalle = (mesaId) => {
-    setSelectedMesaId(mesaId);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedMesaId(null);
-  };
-
   return (
     <div>
       <h2>Mesas</h2>
@@ -56,7 +48,8 @@ const MesaList = () => {
               <div key={mesa.id} className={styles.mesaCard}>
                 <p>Número de Mesa: {mesa.numeroMesa}</p>
                 <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
-                <button onClick={() => handleVerDetalle(mesa.id)}>Ver Detalle</button>
+                <p>Productos: {mesa.productos}</p>
+                <Link to={`/mesa/${mesa.id}`}>Ver Detalle</Link>
               </div>
             ))}
           </div>
@@ -66,17 +59,15 @@ const MesaList = () => {
               <div key={mesa.id} className={styles.mesaCard}>
                 <p>Número de Mesa: {mesa.numeroMesa}</p>
                 <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
-                <button onClick={() => handleVerDetalle(mesa.id)}>Ver Detalle</button>
+                <Link to={`/mesa/${mesa.id}`}>Ver Detalle</Link>
               </div>
             ))}
           </div>
         </div>
-      )}
-      {selectedMesaId && (
-        <MesaDetailModal mesaId={selectedMesaId} onClose={handleCloseModal} />
       )}
     </div>
   );
 };
 
 export default MesaList;
+

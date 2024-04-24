@@ -1,7 +1,7 @@
-// MesaDetailModal.js
 import React, { useState, useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/cliente';
+import styles from './MesaDetailModal.module.css'; // Importa los estilos del módulo CSS
 
 const MesaDetailModal = ({ mesaId, onClose }) => {
   const [mesa, setMesa] = useState(null);
@@ -11,6 +11,7 @@ const MesaDetailModal = ({ mesaId, onClose }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log('MesaDetailModal se está montando');
     const fetchMesa = async () => {
       try {
         setLoading(true);
@@ -30,6 +31,11 @@ const MesaDetailModal = ({ mesaId, onClose }) => {
     };
 
     fetchMesa();
+
+    // Cleanup function
+    return () => {
+      console.log('MesaDetailModal se está desmontando ');
+    };
   }, [mesaId]);
 
   const handleAddProducto = () => {
@@ -55,10 +61,12 @@ const MesaDetailModal = ({ mesaId, onClose }) => {
     return <p>No se encontraron detalles de la mesa.</p>;
   }
 
+  console.log('MesaDetailModal se está renderizando');
+
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={handleClose}>&times;</span>
+    <div className={styles.modal}>
+      <div className={styles.modalContent}>
+        <span className={styles.close} onClick={handleClose}>&times;</span>
         <h2>Detalle de la mesa</h2>
         <p>Número de mesa: {mesa.numeroMesa}</p>
         <p>Fecha de creación: {mesa.createdAt ? mesa.createdAt.toDate().toLocaleString() : 'No disponible'}</p>
