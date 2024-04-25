@@ -53,17 +53,28 @@ const ItemListMesa = ({ greeting, mesaId }) => {
       const mesaSnapshot = await getDoc(mesaRef);
       const mesaData = mesaSnapshot.data();
   
-      // Verificar si la mesa ya tiene productos
-      const productosAnteriores = mesaData.productos || [];
+      // Verificar si el producto ya está en la mesa
+      const productoExistenteIndex = mesaData.productos.findIndex(item => item.id === producto.id);
   
-      // Agregar el nuevo producto a la lista de productos de la mesa
-      const nuevosProductos = [...productosAnteriores, producto];
+      if (productoExistenteIndex !== -1) {
+        // Si el producto ya está en la mesa, actualizar la cantidad
+        const productosActualizados = [...mesaData.productos];
+        productosActualizados[productoExistenteIndex].cantidad += producto.cantidad;
+        
+        // Actualizar el campo 'productos' en la mesa con la lista de productos actualizada
+        await updateDoc(mesaRef, { productos: productosActualizados });
   
-      // Actualizar el campo 'productos' en la mesa con la nueva lista de productos
-      await updateDoc(mesaRef, { productos: nuevosProductos });
+        console.log('Cantidad del producto actualizada en la mesa:', productosActualizados);
+      } else {
+        // Si el producto no está en la mesa, agregarlo con la cantidad seleccionada
+        const nuevosProductos = [...(mesaData.productos || []), { ...producto }];
+        
+        // Actualizar el campo 'productos' en la mesa con la nueva lista de productos
+        await updateDoc(mesaRef, { productos: nuevosProductos });
   
-      console.log('Producto agregado a la mesa:', producto);
-      console.log('Mesa actualizada con el nuevo producto:', nuevosProductos);
+        console.log('Producto agregado a la mesa:', producto);
+        console.log('Mesa actualizada con el nuevo producto:', nuevosProductos);
+      }
     } catch (error) {
       console.error('Error al agregar el producto a la mesa:', error);
     }
@@ -81,15 +92,15 @@ const ItemListMesa = ({ greeting, mesaId }) => {
             {!loading && filtrarProductos().length > 0 ? (
               filtrarProductos().map((producto) => (
                 <ItemMesa
-    key={producto.id}
-    id={producto.id}
-    nombre={producto.nombre}
-    img={producto.img} 
-    precio={producto.precio}
-    stock={producto.stock}
-    descripcion={producto.descripcion}
-    onAddToCart={() => addToMesa(producto)}
-/> 
+                    key={producto.id}
+                    id={producto.id}
+                    nombre={producto.nombre}
+                    img={producto.img} 
+                    precio={producto.precio}
+                    stock={producto.stock}
+                    descripcion={producto.descripcion}
+                    onAddToCart={() => addToMesa(producto)}
+                /> 
 
               ))
             ) : (
