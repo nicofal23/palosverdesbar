@@ -1,63 +1,31 @@
+// ItemCount.js
 import React, { useState } from 'react';
-import styles from '../ItemCount/ItemCount.module.css';
-import Swal from 'sweetalert2';
 
-const ItemCount = ({ inicial, onAdd }) => {
-  const [cantidad, setCantidad] = useState(inicial);
+const ItemCount = ({ stock, inicial, onAdd }) => {
+  const [count, setCount] = useState(inicial);
 
-  const incrementar = () => {
-    setCantidad(cantidad + 1);
-  };
-
-  const quitar = () => {
-    if (cantidad > 1) {
-      setCantidad(cantidad - 1);
+  const handleAdd = () => {
+    if (count < stock) {
+      setCount(count + 1);
     }
   };
- 
-  const showAddToCartAlert = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 1500,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-    });
 
-    Toast.fire({
-      icon: 'success',
-      title: 'Producto agregado al carrito',
-    });
+  const handleRemove = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
   };
 
-  const handleOnAddClick = () => {
-    onAdd && onAdd(cantidad);
-    showAddToCartAlert();
+  const handleOnAdd = () => {
+    onAdd(count);
   };
 
   return (
-    <div className={styles.contador}>
-      <div className={styles.control}>
-        <button className={styles.boton} onClick={quitar}>
-          -
-        </button>
-        <h4 className={styles.numero}>{cantidad}</h4>
-        <button className={styles.boton} onClick={incrementar}>
-          +
-        </button>
-      </div>
-      <div>
-        <button
-          className={styles.boton}
-          onClick={handleOnAddClick}
-        >
-          Agregar al carrito
-        </button>
-      </div>
+    <div>
+      <button onClick={handleRemove}>-</button>
+      <span>{count}</span>
+      <button onClick={handleAdd}>+</button>
+      <button onClick={handleOnAdd}>Agregar al carrito</button>
     </div>
   );
 };

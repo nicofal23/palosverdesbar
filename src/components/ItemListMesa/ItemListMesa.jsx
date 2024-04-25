@@ -47,10 +47,15 @@ const ItemListMesa = ({ greeting, mesaId }) => {
   const addToMesa = async (producto) => {
     try {
         const mesaRef = doc(db, 'mesas', mesaId);
-        const mesaSnapshot = await getDoc(mesaRef);
-        const mesaData = mesaSnapshot.data();
+        const mesaSnapshotPromise = getDoc(mesaRef); // Removed await here
+        const productoExistenteIndexPromise = mesaSnapshotPromise.then(mesaSnapshot => {
+            const mesaData = mesaSnapshot.data();
+            return mesaData.productos.findIndex(item => item.id === producto.id);
+        }); // Removed await here
         
-        const productoExistenteIndex = mesaData.productos.findIndex(item => item.id === producto.id);
+        const [mesaSnapshot, productoExistenteIndex] = await Promise.all([mesaSnapshotPromise, productoExistenteIndexPromise]);
+
+        const mesaData = mesaSnapshot.data();
         
         if (productoExistenteIndex !== -1) {
             const productosActualizados = [...mesaData.productos];
@@ -62,16 +67,17 @@ const ItemListMesa = ({ greeting, mesaId }) => {
             // Actualizar el producto en la lista de productos
             productosActualizados[productoExistenteIndex] = productoExistente;
 
-            await updateDoc(mesaRef, { productos: productosActualizados });
+            updateDoc(mesaRef, { productos: productosActualizados }); // Removed await here
         } else {
             const nuevosProductos = [...(mesaData.productos || []), { ...producto }];
             
-            await updateDoc(mesaRef, { productos: nuevosProductos });
+            updateDoc(mesaRef, { productos: nuevosProductos }); // Removed await here
         }
     } catch (error) {
         console.error('Error al agregar el producto a la mesa:', error);
     }
 };
+
 
 
 
