@@ -46,39 +46,36 @@ const ItemListMesa = ({ greeting, mesaId }) => {
 
   const addToMesa = async (producto) => {
     try {
-      // Obtener la referencia de la mesa actual
-      const mesaRef = doc(db, 'mesas', mesaId);
-  
-      // Obtener los datos actuales de la mesa
-      const mesaSnapshot = await getDoc(mesaRef);
-      const mesaData = mesaSnapshot.data();
-  
-      // Verificar si el producto ya está en la mesa
-      const productoExistenteIndex = mesaData.productos.findIndex(item => item.id === producto.id);
-  
-      if (productoExistenteIndex !== -1) {
-        // Si el producto ya está en la mesa, actualizar la cantidad
-        const productosActualizados = [...mesaData.productos];
-        productosActualizados[productoExistenteIndex].cantidad += producto.cantidad;
+        const mesaRef = doc(db, 'mesas', mesaId);
+        const mesaSnapshot = await getDoc(mesaRef);
+        const mesaData = mesaSnapshot.data();
         
-        // Actualizar el campo 'productos' en la mesa con la lista de productos actualizada
-        await updateDoc(mesaRef, { productos: productosActualizados });
-  
-        console.log('Cantidad del producto actualizada en la mesa:', productosActualizados);
-      } else {
-        // Si el producto no está en la mesa, agregarlo con la cantidad seleccionada
-        const nuevosProductos = [...(mesaData.productos || []), { ...producto }];
+        const productoExistenteIndex = mesaData.productos.findIndex(item => item.id === producto.id);
         
-        // Actualizar el campo 'productos' en la mesa con la nueva lista de productos
-        await updateDoc(mesaRef, { productos: nuevosProductos });
-  
-        console.log('Producto agregado a la mesa:', producto);
-        console.log('Mesa actualizada con el nuevo producto:', nuevosProductos);
-      }
+        if (productoExistenteIndex !== -1) {
+            const productosActualizados = [...mesaData.productos];
+            const productoExistente = productosActualizados[productoExistenteIndex];
+            
+            // Agregar la cantidad seleccionada al objeto del producto
+            productoExistente.cantidad = producto.cantidad;
+            
+            // Actualizar el producto en la lista de productos
+            productosActualizados[productoExistenteIndex] = productoExistente;
+
+            await updateDoc(mesaRef, { productos: productosActualizados });
+        } else {
+            const nuevosProductos = [...(mesaData.productos || []), { ...producto }];
+            
+            await updateDoc(mesaRef, { productos: nuevosProductos });
+        }
     } catch (error) {
-      console.error('Error al agregar el producto a la mesa:', error);
+        console.error('Error al agregar el producto a la mesa:', error);
     }
-  };
+};
+
+
+
+
   
 
   return (
@@ -92,15 +89,14 @@ const ItemListMesa = ({ greeting, mesaId }) => {
             {!loading && filtrarProductos().length > 0 ? (
               filtrarProductos().map((producto) => (
                 <ItemMesa
-                    key={producto.id}
-                    id={producto.id}
-                    nombre={producto.nombre}
-                    img={producto.img} 
-                    precio={producto.precio}
-                    stock={producto.stock}
-                    descripcion={producto.descripcion}
-                    onAddToCart={() => addToMesa(producto)}
-                /> 
+                key={producto.id}
+                id={producto.id}
+                nombre={producto.nombre}
+                precio={producto.precio}
+                stock={producto.stock}
+                cantidad={producto.cantidad}
+                onAddToCart={() => addToMesa(producto)}
+              />
 
               ))
             ) : (

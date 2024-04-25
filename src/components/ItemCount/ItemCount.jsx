@@ -1,15 +1,12 @@
-// ItemCount.jsx
 import React, { useState } from 'react';
 import styles from '../ItemCount/ItemCount.module.css';
 import Swal from 'sweetalert2';
 
-const ItemCount = ({ stock, inicial, onAdd }) => {
+const ItemCount = ({ inicial, onAdd }) => {
   const [cantidad, setCantidad] = useState(inicial);
 
   const incrementar = () => {
-    if (cantidad < stock) {
-      setCantidad(cantidad + 1);
-    }
+    setCantidad(cantidad + 1);
   };
 
   const quitar = () => {
@@ -57,7 +54,6 @@ const ItemCount = ({ stock, inicial, onAdd }) => {
         <button
           className={styles.boton}
           onClick={handleOnAddClick}
-          disabled={stock < 1}
         >
           Agregar al carrito
         </button>
