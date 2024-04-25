@@ -1,29 +1,38 @@
 import React, { useState } from "react";
+import styles from './ProductSearch.module.css';
 
-const ProductSearch = ({ onSearch}) => {
+const ProductSearch = ({ onSearch }) => {
     const [searchTerm, setSearchTerm] = useState('');
 
-    const handleSearchChange = (event) => {
-        const value = event.target.value;
-        setSearchTerm(value);
-
-        // Llama a la función de búsqueda solo si el término de búsqueda tiene al menos tres caracteres
-        if (value.length >= 3 || value === '') {
-            onSearch(value.toLowerCase()); // Convertir el término de búsqueda a minúsculas antes de pasar a la función
+    // Función para manejar el cambio de término de búsqueda
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+        // Pasar el término de búsqueda al componente padre solo si tiene al menos 2 letras
+        if (term.length >= 2) {
+            onSearch(term);
+        } else {
+            // Si el término de búsqueda tiene menos de 2 letras, borrar los resultados mostrados
+            onSearch('');
         }
     }
 
     return (
-        <div>
-            <label htmlFor="search">Buscar por nombre: </label>
+        <div className={styles.searchContainer}>
+            <label htmlFor="search" className={styles.label}>Buscar por nombre: </label>
             <input
                 type="text"
                 id="search"
                 value={searchTerm}
-                onChange={handleSearchChange}
+                onChange={(e) => handleSearch(e.target.value)}
+                className={styles.input}
             />
+            {/* Mostrar un mensaje para indicar que la búsqueda comienza a partir de la segunda letra */}
+            {searchTerm.length >= 2 && (
+                <p className={styles.infoMessage}>La búsqueda comienza a partir de la segunda letra.</p>
+            )}
         </div>
     );
 }
 
 export default ProductSearch;
+

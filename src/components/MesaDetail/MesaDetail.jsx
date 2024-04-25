@@ -3,6 +3,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/cliente';
 import { useParams } from 'react-router-dom';
 import { Timestamp } from 'firebase/firestore';
+import ItemListMesa from '../ItemListMesa/ItemListMesa';
 
 const MesaDetail = () => {
   const { id } = useParams(); // Obtener el id de los parámetros de la URL
@@ -46,6 +47,7 @@ const MesaDetail = () => {
           <p>Fecha de Creación: {mesa.createdAt ? new Date(mesa.createdAt.seconds * 1000).toLocaleString() : 'No disponible'}</p>
           <p>Productos: {mesa.productos}</p>
           <p>Estado: {mesa.estado ? 'Abierta' : 'Cerrada'}</p>
+          <ItemListMesa mesa={mesa}/>
         </div>
       ) : (
         <p>No se encontró la mesa</p>

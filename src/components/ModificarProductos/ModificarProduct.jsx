@@ -9,6 +9,7 @@ import ModificarPrecio from "../ModificarPrecio/ModificarPrecio";
 
 
 
+
 const ModificarProductos = () => {
     const [productos, setProductos] = useState([]);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
