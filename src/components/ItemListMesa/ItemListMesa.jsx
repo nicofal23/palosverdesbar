@@ -84,7 +84,7 @@ const ItemListMesa = ({ greeting, mesaId }) => {
     key={producto.id}
     id={producto.id}
     nombre={producto.nombre}
-    img={producto.img}
+    img={producto.img} 
     precio={producto.precio}
     stock={producto.stock}
     descripcion={producto.descripcion}
