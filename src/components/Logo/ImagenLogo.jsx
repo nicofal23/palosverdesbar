@@ -4,7 +4,7 @@ import style from './ImagenLogo.module.css';
 const Logo = () => {
     return (
         <div className={style.ContenedorImagen}>
-           <a href="#"><img src={moniessenImage} alt="MoniEssen" className={moniessen}/></a>
+           <a href="#" className={style.a}><img src={moniessenImage} alt="MoniEssen" className={style.moniessen}/></a>
         </div>
     );
   };

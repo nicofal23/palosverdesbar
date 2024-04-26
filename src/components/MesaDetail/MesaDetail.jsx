@@ -4,7 +4,8 @@ import { db } from '../../firebase/cliente';
 import { useParams } from 'react-router-dom';
 import ItemListMesa from '../ItemListMesa/ItemListMesa';
 import Swal from 'sweetalert2';
-import styles from './MesaDetail';
+import styles from './MesaCard.module.css';
+import { jsPDF } from 'jspdf';
 
 const MesaDetail = () => {
   const { id } = useParams(); // Obtener el id de los parámetros de la URL
@@ -115,6 +116,30 @@ const MesaDetail = () => {
     }
   };
 
+  // Función para cerrar la mesa
+  const handleCerrarMesa = async () => {
+    try {
+      const mesaRef = doc(db, 'mesas', id);
+      await updateDoc(mesaRef, { estado: false });
+
+      // Generar el detalle de la mesa en PDF
+      const pdf = new jsPDF();
+      pdf.text('Detalle de la Mesa', 10, 10);
+      pdf.text(`Número de Mesa: ${mesa.numeroMesa}`, 10, 20);
+      pdf.text(`Fecha de Creación: ${mesa.createdAt ? new Date(mesa.createdAt.seconds * 1000).toLocaleString() : 'No disponible'}`, 10, 30);
+      pdf.text('Productos en la mesa:', 10, 40);
+      productosMesa.forEach((producto, index) => {
+        pdf.text(`${index + 1}. Producto: ${producto.nombre}, Precio: ${producto.precio}, Cantidad: ${producto.cantidad}`, 10, 50 + index * 10);
+      });
+      pdf.text(`Total: ${totalCompra}`, 10, 60 + productosMesa.length * 10);
+      pdf.save(`Detalle_Mesa_${mesa.numeroMesa}.pdf`);
+
+      console.log('Mesa cerrada y detalle descargado en PDF exitosamente.');
+    } catch (error) {
+      console.error('Error al cerrar la mesa:', error);
+    }
+  };
+
   // Calcular el total de la compra
   const totalCompra = productosMesa.reduce((total, producto) => {
     return total + producto.precio * producto.cantidad;
@@ -123,35 +148,50 @@ const MesaDetail = () => {
   return (
     <div className={styles.contenedor}>
       {loading ? (
-        <p>Cargando detalles de la mesa...</p>
+        <div className={styles.mesa}>
+          <p>Cargando detalles de la mesa...</p>
+        </div>
       ) : mesa ? (
         <div className={styles.detallemesa}>
           <div className={styles.detalles}>
             <p>Número de Mesa: {mesa.numeroMesa}</p>
             <p>Fecha de Creación: {mesa.createdAt ? new Date(mesa.createdAt.seconds * 1000).toLocaleString() : 'No disponible'}</p>
             <p>Estado: {mesa.estado ? 'Abierta' : 'Cerrada'}</p>
-            <h2>Productos en la mesa:</h2>
+            <div className={styles.conteinerH2}>
+              <h2 className={styles.titulo}>Productos en la mesa:</h2>
+            </div>
             {productosMesa.map((producto, index) => (
-              <div key={index}>
-                <p>Producto: {producto.nombre}</p>
-                <p>Precio: ${producto.precio}</p>
-                <p>Cantidad: {producto.cantidad}</p>
-                <button onClick={() => handleEliminarProducto(index)}>X</button>
-                <button onClick={() => handleModificarCantidad(index)}>Modificar</button>
+              <div key={index} className={styles.card}>
+                <div className={styles.cardMesa}>
+                  <p>Producto: {producto.nombre}</p>
+                  <p>Precio: ${producto.precio}</p>
+                  <p>Cantidad: {producto.cantidad}</p>
+                  <div>
+                    <button onClick={() => handleModificarCantidad(index)}>Modificar</button>
+                  </div>
+                </div>
+                <div className={styles.delete}>
+                  <button onClick={() => handleEliminarProducto(index)}>X</button>
+                </div>
               </div>
             ))}
-            <p>Total: ${totalCompra}</p> {/* Mostrar el total de la compra */}
+            <p className={styles.parrafo}>Total: ${totalCompra}</p> {/* Mostrar el total de la compra */}
+            {mesa.estado && (
+              <button onClick={handleCerrarMesa}>Cerrar Mesa</button>
+            )}
           </div>
-          <div className={styles.listaProductos}>
-            <h2>Productos Disponibles:</h2>
-            <ItemListMesa greeting="Lista de Productos" mesaId={id} onAdd={handleAddToMesa}/>
-          </div>
+          {mesa.estado && (
+            <div className={styles.listaProductos}>
+              <h2>Productos Disponibles:</h2>
+              <ItemListMesa greeting="Lista de Productos" mesaId={id} onAdd={handleAddToMesa}/>
+            </div>
+          )}
         </div>
       ) : (
         <p>No se encontró la mesa</p>
       )}
     </div>
   );
-};
+};  
 
 export default MesaDetail;

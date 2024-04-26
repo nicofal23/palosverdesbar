@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import styles from './MesaCard.module.css'
 
 const Mesa = () => {
   const handleAbrirMesaClick = () => {
@@ -11,7 +12,7 @@ const Mesa = () => {
   };
 
   return (
-    <div>
+    <div className={styles.conteinerAdmMesa}>
       <Link to="/abrir-mesa">
         <button onClick={handleAbrirMesaClick}>Abrir Mesa</button>
       </Link>

@@ -35,9 +35,9 @@ export default function Prueba() {
       <h2 className="titulo">Panel de usuario</h2>
       {!loggedIn && (
         <div className="buttons-container">
-          <button className="blue-button" onClick={() => setShowModal(true)}>Administración</button>
+          <button className="admin-button" onClick={() => setShowModal(true)}>Administración</button>
           <Link to="/carta">
-            <button className="blue-button">Carta</button>
+            <button className="admin-button">Carta</button>
           </Link>
         </div>
       )}
@@ -55,7 +55,7 @@ export default function Prueba() {
       
       {loggedIn && (
         <div className="buttons-container">
-          <Link to="/73K9pQzX5E"> 
+          <Link to="/73K9pQzX5E" > 
             <button className="admin-button">Agregar Producto</button>
           </Link>
           <Link to="/administrar-mesas">

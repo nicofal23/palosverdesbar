@@ -4,7 +4,6 @@ import { db } from '../../firebase/cliente';
 import styles from '../MesaDetail/MesaCard.module.css';
 import { Link } from 'react-router-dom';
 
-
 const MesaList = () => {
   const [mesas, setMesas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,28 +37,28 @@ const MesaList = () => {
 
   return (
     <div>
-      <h2>Mesas</h2>
+      <h2 className={styles.h2}>Mesas</h2>
       {loading ? (
         <p>Cargando mesas...</p>
       ) : (
         <div>
           <h3>Mesas Abiertas</h3>
           <div className={styles.mesaContainer}>
-            {mesas.filter(mesa => mesa.estado).map(mesa => (
-              <div key={mesa.id} className={styles.mesaCard}>
+            {mesas.filter(mesa => mesa.estado === true).map(mesa => (
+              <div key={mesa.id} className={styles.mesaCard1}>
                 <p>Número de Mesa: {mesa.numeroMesa}</p>
                 <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
-                <Link to={`/mesa/${mesa.id}`}>Ver Detalle</Link> 
+                <Link to={`/mesa/${mesa.id}`} className={styles.verDetalle}>Ver Detalle</Link> 
               </div>
             ))}
           </div>
           <h3>Mesas Cerradas</h3>
           <div className={styles.mesaContainer}>
-            {mesas.filter(mesa => !mesa.estado).map(mesa => (
+            {mesas.filter(mesa => mesa.estado === false).map(mesa => (
               <div key={mesa.id} className={styles.mesaCard}>
                 <p>Número de Mesa: {mesa.numeroMesa}</p>
                 <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
-                <Link to={`/mesa/${mesa.id}`}>Ver Detalle</Link> {/* No necesitas pasar id como prop */}
+                <Link to={`/mesa/${mesa.id}`} className={styles.verDetalle} >Ver Detalle</Link>
               </div>
             ))}
           </div>

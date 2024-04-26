@@ -3,6 +3,14 @@
   display: flex;
   flex-wrap: wrap;
 }
+.mesaCard1{
+  border: 1px solid #38c70c;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+
+}
 
 .mesaCard {
   border: 1px solid #ccc;
@@ -10,4 +18,95 @@
   padding: 10px;
   margin: 10px;
   width: 200px;
+}
+
+
+.detallemesa {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  gap: 100px;
+}
+
+.detalles {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.cardMesa {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+.card {
+  display: flex;
+  align-items: center;
+}
+
+h2{
+  color: white;
+}
+
+.conteinerH2{
+  display: flex;
+  justify-content: center;
+}
+
+.parrafo{
+  font-size: 40px;
+    color: #ab81fd;
+
+}
+
+.delete button{
+  border-radius: 50%;
+  background-color:#37377e;
+}
+
+button {
+  background-color: #37377e;
+}
+
+.h2{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 35px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.titulo {
+  text-align: center;
+}
+
+.verDetalle {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #37377e;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+ 
+.verDetalle:hover {
+  background-color: rgb(0, 0, 0);
 }

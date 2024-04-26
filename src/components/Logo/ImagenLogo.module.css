@@ -2,3 +2,13 @@
     display: flex;
     justify-content: center;
 } 
+
+.moniessen {
+    display: flex;
+    justify-content: center;
+    width: 60%;
+}
+.a{
+    display: flex;
+    justify-content: center;
+}

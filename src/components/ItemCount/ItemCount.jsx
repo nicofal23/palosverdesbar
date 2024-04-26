@@ -20,11 +20,15 @@ const ItemCount = ({ inicial, onAdd }) => {
   };
 
   return (
-    <div>
-      <button onClick={handleRemove}>-</button>
-      <span className={styles.contador}>{count}</span>
-      <button onClick={handleAdd}>+</button>
-      <button onClick={handleOnAdd}>Agregar al carrito</button>
+    <div className={styles.conteiner}>
+      <div className={styles.conteinerCount}>
+          <button onClick={handleRemove} className={styles.button}>-</button>
+          <span className={styles.contador}>{count}</span>
+          <button onClick={handleAdd} className={styles.button}>+</button>
+      </div>
+      <div className={styles.continerAgregar}>
+        <button onClick={handleOnAdd} className={styles.agregar}>Agregar</button>
+      </div>
     </div>
   );
 };
