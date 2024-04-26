@@ -1,6 +1,6 @@
 // ItemMesa.js
 import React from 'react';
-import styles from './Item.module.css';
+import styles from './ItemMesa.module.css';
 import ItemCount from '../ItemCount/ItemCount';
 
 const ItemMesa = ({ id, nombre, precio, stock, onAddToCart }) => {

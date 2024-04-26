@@ -6,7 +6,7 @@ import style from '../ItemListCointainer/ItemListContainer.module.css';
 import ProductSearch from '../ProductSearch/ProductSearch';
 import ItemMesa from '../Item/ItemMesa';
 
-const ItemListMesa = ({ greeting, mesaId }) => {
+const ItemListMesa = ({ greeting, mesaId, onAddToMesa, productosMesa }) => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -53,18 +53,20 @@ const ItemListMesa = ({ greeting, mesaId }) => {
       // Agregar el nuevo producto a la lista de productos de la mesa
       const nuevosProductos = [
         ...(mesaData.productos || []),
-        { nombre: producto.nombre, precio: producto.precio, cantidad: cantidadSeleccionada } // Añadiendo la cantidad aquí
+        { nombre: producto.nombre, precio: producto.precio, cantidad: cantidadSeleccionada }
       ];
   
       // Actualizar la lista de productos de la mesa con los nuevos productos
       await updateDoc(mesaRef, { productos: nuevosProductos });
   
       console.log('Producto agregado a la mesa exitosamente.');
+
+      // Llamar a la función para actualizar la lista de productos en MesaDetail
+      onAddToMesa();
     } catch (error) {
       console.error('Error al agregar el producto a la mesa:', error);
     }
   };
-  
   
   
   return (

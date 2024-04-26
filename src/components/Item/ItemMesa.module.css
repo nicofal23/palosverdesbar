@@ -1,0 +1,74 @@
+/* ItemMesa.module.css */
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    width: 300px;
+  }
+  
+  .info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .nombre {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .precio {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  
+  .row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px; /* Añadido para separar los elementos */
+  }
+  
+  /* Estilos para los botones + y - */
+  .item-count-button {
+    background-color: transparent; /* Fondo transparente */
+    border: none; /* Sin borde */
+    cursor: pointer;
+    color: white; /* Color blanco */
+    font-size: 20px; /* Tamaño de fuente */
+    border-radius: 50%; /* Borde redondo */
+    width: 32px; /* Ancho */
+    height: 32px; /* Alto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .item-count-button:hover {
+    background-color: #ccc; /* Color de fondo al pasar el mouse */
+  }
+  
+  .item-count-button:focus {
+    outline: none; /* Eliminar el contorno al enfocar */
+  }
+  
+  .item-count-label {
+    margin: 0 8px; /* Espaciado entre el contador y los botones */
+  }
+  
+  /* Estilos para el botón "Agregar al carrito" */
+  .add-to-cart-button {
+    background-color: #007bff; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 4px; /* Borde redondo */
+    padding: 8px 16px; /* Relleno */
+    cursor: pointer;
+    margin-top: 8px; /* Espacio superior */
+  }
+  
+  .add-to-cart-button:hover {
+    background-color: #0056b3; /* Color de fondo al pasar el mouse */
+  }
+  
