@@ -95,14 +95,18 @@ const ItemListMesa = ({ greeting, mesaId }) => {
             {!loading && filtrarProductos().length > 0 ? (
               filtrarProductos().map((producto) => (
                 <ItemMesa
-                key={producto.id}
-                id={producto.id}
-                nombre={producto.nombre}
-                precio={producto.precio}
-                stock={producto.stock}
-                cantidad={producto.cantidad}
-                onAddToCart={() => addToMesa(producto)}
-              />
+  key={producto.id}
+  id={producto.id}
+  nombre={producto.nombre}
+  precio={producto.precio}
+  stock={producto.stock}
+  cantidad={producto.cantidad}
+  onAddToCart={(cantidadSeleccionada) => addToMesa({
+    nombre: producto.nombre,
+    precio: producto.precio,
+    cantidad: cantidadSeleccionada
+  })}
+/>
 
               ))
             ) : (

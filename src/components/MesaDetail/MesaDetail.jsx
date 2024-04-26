@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../firebase/cliente';
 import { useParams } from 'react-router-dom';
-import { Timestamp } from 'firebase/firestore';
 import ItemListMesa from '../ItemListMesa/ItemListMesa';
-import ProductSearch from '../ProductSearch/ProductSearch'; // Importar el componente de búsqueda de productos
 
 const MesaDetail = () => {
   const { id } = useParams(); // Obtener el id de los parámetros de la URL
   const [mesa, setMesa] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [productosMesa, setProductosMesa] = useState([]); // Estado para almacenar los productos de la mesa
+  const [productosMesa, setProductosMesa] = useState([]);
+
 
   useEffect(() => {
     const fetchMesa = async () => {
@@ -25,8 +24,6 @@ const MesaDetail = () => {
             ...mesaDoc.data()
           };
           setMesa(mesaData);
-          // Obtener los productos asignados a la mesa directamente del campo 'productos' en el documento de la mesa
-          setProductosMesa(mesaData.productos || []); // Si no hay productos, establecer un array vacío
         } else {
           console.log('No existe la mesa con el ID proporcionado');
         }
@@ -41,9 +38,21 @@ const MesaDetail = () => {
   }, [id]);
 
   // Función para manejar la adición de productos a la mesa
-  const handleAddToMesa = async (producto) => {
-    // Implementa la lógica para agregar el producto a la mesa aquí
-    console.log('Agregando producto a la mesa:', producto);
+  // Dentro del componente MesaDetail
+  const handleAddToMesa = async ({ nombre, precio, cantidad }) => {
+    try {
+      const mesaRef = doc(db, 'mesas', id);
+      await updateDoc(mesaRef, {
+        productos: arrayUnion({
+          nombre,
+          precio,
+          cantidad
+        })
+      });
+      console.log('Producto agregado a la mesa exitosamente.');
+    } catch (error) {
+      console.error('Error al agregar el producto a la mesa:', error);
+    }
   };
 
   return (
