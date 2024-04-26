@@ -19,6 +19,7 @@ const MesaList = () => {
         const mesasData = querySnapshot.docs.map(doc => ({
           id: doc.id,
           numeroMesa: doc.data().numeroMesa,
+          nombreSocio: doc.data().nombreSocio,
           createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : null,
           productos: doc.data().productos,
           estado: doc.data().estado
@@ -47,6 +48,7 @@ const MesaList = () => {
             {mesas.filter(mesa => mesa.estado === true).map(mesa => (
               <div key={mesa.id} className={styles.mesaCard1}>
                 <p>Número de Mesa: {mesa.numeroMesa}</p>
+                <p>Socio: {mesa.nombreSocio}</p>
                 <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
                 <Link to={`/mesa/${mesa.id}`} className={styles.verDetalle}>Ver Detalle</Link> 
               </div>
@@ -57,6 +59,7 @@ const MesaList = () => {
             {mesas.filter(mesa => mesa.estado === false).map(mesa => (
               <div key={mesa.id} className={styles.mesaCard}>
                 <p>Número de Mesa: {mesa.numeroMesa}</p>
+                <p>Socio: {mesa.nombreSocio}</p>
                 <p>Fecha de Creación: {mesa.createdAt ? mesa.createdAt.toLocaleString() : 'No disponible'}</p>
                 <Link to={`/mesa/${mesa.id}`} className={styles.verDetalle} >Ver Detalle</Link>
               </div>

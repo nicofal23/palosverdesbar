@@ -1,0 +1,19 @@
+.contenedor{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.h1{
+    color: white;
+    background-color: rgb(83, 83, 216);
+    padding: 30px;
+    border-radius: 50%;
+}
+.input {
+    width: 50%;
+}
+.buttonContainer{
+    margin: 20px;
+    display: flex;
+    gap: 15px;
+}

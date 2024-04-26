@@ -1,41 +1,61 @@
 import React, { useState } from 'react';
-import { db } from '../../firebase/cliente'; // Importa la referencia a la base de datos desde tu archivo cliente.js
-import { collection, addDoc } from 'firebase/firestore'; // Importa funciones para trabajar con colecciones desde Firestore
+import { db } from '../../firebase/cliente';
+import { collection, addDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
+import styles from './AbrirMesa.module.css';
+import Swal from 'sweetalert2';
 
 const MesaAbrir = () => {
   const [numeroMesa, setNumeroMesa] = useState('');
+  const [nombreSocio, setNombreSocio] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleNumeroMesaChange = (event) => {
     setNumeroMesa(event.target.value);
   };
+
+  const handleNombreSocioChange = (event) => {
+    setNombreSocio(event.target.value);
+  };
+
   const handleVerMesasAbiertasClick = () => {
-    setShowMesaList(true); // Cambia esto según tu lógica para mostrar las mesas abiertas
+    // Lógica para ver las mesas abiertas
   };
 
   const handleAbrirMesaClick = async () => {
-    if (!numeroMesa) {
-      setError('Por favor ingresa un número de mesa.');
+    if (!numeroMesa || !nombreSocio) {
+      setError('Por favor ingresa un número de mesa y el nombre del socio.');
       return;
     }
 
     setLoading(true);
 
     try {
-      const mesaId = `${numeroMesa}-${new Date().getTime()}`; // Genera un ID único basado en el número de mesa y la fecha y hora actual
-      const mesaRef = collection(db, 'mesas'); // Referencia a la colección de mesas
+      const mesaId = `${numeroMesa}-${new Date().getTime()}`;
+      const mesaRef = collection(db, 'mesas');
 
-      // Crea la mesa en Firestore
+      // Agrega el campo 'estado' con el valor 'true' al documento de la mesa
       await addDoc(mesaRef, {
-        id: mesaId, // Utiliza el ID generado para el documento
+        id: mesaId,
         numeroMesa: numeroMesa,
+        nombreSocio: nombreSocio,
+        estado: true, // Estado por defecto siempre en true
         createdAt: new Date(),
-        productos: [] // Inicialmente, la mesa no tiene productos
+        productos: []
       });
 
-      // Lógica adicional para redirigir o mostrar un mensaje de éxito
+      Swal.fire({
+        icon: 'success',
+        title: 'Mesa Abierta',
+        text: 'La mesa se ha abierto exitosamente. Puedes comenzar a operar.',
+        confirmButtonText: 'Administrar Mesas',
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = '/mesas-abiertas';
+        }
+      });
     } catch (error) {
       console.error('Error al abrir la mesa:', error);
       setError('Hubo un error al abrir la mesa. Por favor, intenta nuevamente.');
@@ -45,21 +65,30 @@ const MesaAbrir = () => {
   };
 
   return (
-    <div>
-      <h1>Abrir Mesa</h1>
+    <div className={styles.contenedor}>
+      <h1 className={styles.h1}>Abrir Mesa</h1>
       {error && <p>{error}</p>}
-      <input
-        type="text"
-        value={numeroMesa}
-        onChange={handleNumeroMesaChange}
-        placeholder="Número de Mesa"
-      />
-      <button onClick={handleAbrirMesaClick} disabled={loading}>Abrir Mesa</button>
-      <Link to="/mesas-abiertas">
-        <button onClick={handleVerMesasAbiertasClick}>Ver Mesas Abiertas</button>
-      </Link>
+      <div className={styles.input}>
+        <input
+          type="text"
+          value={numeroMesa}
+          onChange={handleNumeroMesaChange}
+          placeholder="Número de Mesa"
+        />
+        <input
+          type="text"
+          value={nombreSocio}
+          onChange={handleNombreSocioChange}
+          placeholder="Nombre del Socio"
+        />
+      </div>
+      <div className={styles.buttonContainer}>
+        <button onClick={handleAbrirMesaClick} disabled={loading}>Abrir Mesa</button>
+        <Link to="/administrar-mesas">
+          <button>Administrar Mesas</button>
+        </Link>
+      </div>
     </div>
-    
   );
 };
 
