@@ -62,15 +62,6 @@ const ItemListMesa = ({ greeting, mesaId }) => {
     }
   };
   
-  
-  
-
-
-
-
-
-  
-
   return (
     <div className={style.container}>
       <div className={style.row}>
