@@ -4,6 +4,7 @@ import { db } from '../../firebase/cliente';
 import { useParams } from 'react-router-dom';
 import ItemListMesa from '../ItemListMesa/ItemListMesa';
 import Swal from 'sweetalert2';
+import styles from './MesaDetailModal';
 
 const MesaDetail = () => {
   const { id } = useParams(); // Obtener el id de los parámetros de la URL
@@ -17,14 +18,14 @@ const MesaDetail = () => {
         setLoading(true);
         const mesaRef = doc(db, 'mesas', id);
         const mesaDoc = await getDoc(mesaRef);
-  
+
         if (mesaDoc.exists()) {
           const mesaData = {
             id: mesaDoc.id,
             ...mesaDoc.data()
           };
           setMesa(mesaData);
-          
+
           // Obtener los productos asignados a la mesa
           if (mesaData.productos) {
             setProductosMesa(mesaData.productos);
@@ -38,7 +39,7 @@ const MesaDetail = () => {
         setLoading(false);
       }
     };
-  
+
     fetchMesa();
   }, [id]);
 
@@ -55,7 +56,7 @@ const MesaDetail = () => {
         })
       });
       console.log('Producto agregado a la mesa exitosamente.');
-      
+
       // Actualizar la lista de productos de la mesa después de agregar el producto
       setProductosMesa([...productosMesa, { nombre, precio, cantidad }]);
     } catch (error) {
@@ -98,7 +99,7 @@ const MesaDetail = () => {
       }
     });
   };
-  
+
 
   const actualizarProductosMesa = async (nuevosProductos) => {
     try {
@@ -111,31 +112,30 @@ const MesaDetail = () => {
   };
 
   return (
-    <div>
+    <div className={styles.contenedor}>
       {loading ? (
         <p>Cargando detalles de la mesa...</p>
       ) : mesa ? (
-        <div>
-          <p>Número de Mesa: {mesa.numeroMesa}</p>
-          <p>Fecha de Creación: {mesa.createdAt ? new Date(mesa.createdAt.seconds * 1000).toLocaleString() : 'No disponible'}</p>
-          <p>Estado: {mesa.estado ? 'Abierta' : 'Cerrada'}</p>
-          
-          {/* Mostrar los productos asignados a la mesa */}
-          <h2>Productos en la mesa:</h2>
-          {productosMesa.map((producto, index) => (
-            <div key={index}>
-              <p>{producto.nombre}</p>
-              <p>{producto.stock}</p>
-              <p>{producto.precio}</p>
-              <button onClick={() => handleEliminarProducto(index)}>Eliminar</button>
-              {/* Mostrar otros detalles del producto si es necesario */}
-            </div>
-          ))}
-          
-          
-          {/* Mostrar la lista de productos disponibles para agregar */}
-          <h2>Productos Disponibles:</h2>
-          <ItemListMesa greeting="Lista de Productos" mesaId={id} onAdd={handleAddToMesa}/>
+        <div className={styles.detallemesa}>
+          <div className={styles.detalles}>
+            <p>Número de Mesa: {mesa.numeroMesa}</p>
+            <p>Fecha de Creación: {mesa.createdAt ? new Date(mesa.createdAt.seconds * 1000).toLocaleString() : 'No disponible'}</p>
+            <p>Estado: {mesa.estado ? 'Abierta' : 'Cerrada'}</p>
+            <h2>Productos en la mesa:</h2>
+            {productosMesa.map((producto, index) => (
+              <div key={index}>
+                <p>{producto.nombre}</p>
+                <p>{producto.stock}</p>
+                <p>{producto.precio}</p>
+                <button onClick={() => handleEliminarProducto(index)}>Eliminar</button>
+                {/* Mostrar otros detalles del producto si es necesario */}
+              </div>
+            ))}
+          </div>
+          <div className={styles.listaProductos}>
+            <h2>Productos Disponibles:</h2>
+            <ItemListMesa greeting="Lista de Productos" mesaId={id} onAdd={handleAddToMesa}/>
+          </div>
         </div>
       ) : (
         <p>No se encontró la mesa</p>
