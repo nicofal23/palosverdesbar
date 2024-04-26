@@ -44,7 +44,7 @@ const ItemListMesa = ({ greeting, mesaId }) => {
     );
   }
 
-  const addToMesa = async (producto) => {
+  const addToMesa = async (producto, cantidadSeleccionada) => {
     try {
       const mesaRef = doc(db, 'mesas', mesaId);
       const mesaSnapshot = await getDoc(mesaRef);
@@ -53,7 +53,7 @@ const ItemListMesa = ({ greeting, mesaId }) => {
       // Agregar el nuevo producto a la lista de productos de la mesa
       const nuevosProductos = [
         ...(mesaData.productos || []),
-        { nombre: producto.nombre, cantidad: producto.cantidad }
+        { nombre: producto.nombre, precio: producto.precio, cantidad: cantidadSeleccionada } // Añadiendo la cantidad aquí
       ];
   
       // Actualizar la lista de productos de la mesa con los nuevos productos
@@ -64,6 +64,7 @@ const ItemListMesa = ({ greeting, mesaId }) => {
       console.error('Error al agregar el producto a la mesa:', error);
     }
   };
+  
   
   
   return (
@@ -82,12 +83,7 @@ const ItemListMesa = ({ greeting, mesaId }) => {
   nombre={producto.nombre}
   precio={producto.precio}
   stock={producto.stock}
-  cantidad={producto.cantidad}
-  onAddToCart={(cantidadSeleccionada) => addToMesa({
-    nombre: producto.nombre,
-    precio: producto.precio,
-    cantidad: cantidadSeleccionada
-  })}
+  onAddToCart={(producto, cantidadSeleccionada) => addToMesa(producto, cantidadSeleccionada)} // Pasando producto y cantidadSeleccionada
 />
 
               ))

@@ -5,8 +5,8 @@ import ItemCount from '../ItemCount/ItemCount';
 
 const ItemMesa = ({ id, nombre, precio, stock, onAddToCart }) => {
     const handleAddToCart = (cantidadSeleccionada) => {
-        onAddToCart({ id, nombre, precio, cantidad: cantidadSeleccionada });
-    };
+            onAddToCart({ id, nombre, precio }, cantidadSeleccionada); // Eliminando la propiedad cantidad
+        };
     
     return (
         <div className={styles.card}>

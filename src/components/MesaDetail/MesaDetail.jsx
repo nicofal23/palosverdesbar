@@ -130,7 +130,7 @@ const handleModificarCantidad = async (index) => {
   <div key={index}>
     <p>Producto: {producto.nombre}</p>
     <p>Precio: ${producto.precio}</p>
-    <p>Cantidad: {producto.cantidad.cantidad}</p> {/* Solo renderizando la cantidad */}
+    <p>Cantidad: {producto.cantidad}</p> {/* Solo renderizando la cantidad */}
     <button onClick={() => handleEliminarProducto(index)}>X</button>
     <button onClick={() => handleModificarCantidad(index)}>Modificar</button>
   </div>
