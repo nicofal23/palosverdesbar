@@ -1,5 +1,6 @@
 // ItemCount.js
 import React, { useState } from 'react';
+import styles from './ItemCount.module.css'
 
 const ItemCount = ({ stock, inicial, onAdd }) => {
   const [count, setCount] = useState(inicial);
@@ -21,7 +22,7 @@ const ItemCount = ({ stock, inicial, onAdd }) => {
   return (
     <div>
       <button onClick={handleRemove}>-</button>
-      <span>{count}</span>
+      <span className={styles.contador}>{count}</span>
       <button onClick={handleAdd}>+</button>
       <button onClick={handleOnAdd}>Agregar al carrito</button>
     </div>

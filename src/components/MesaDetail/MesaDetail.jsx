@@ -4,7 +4,7 @@ import { db } from '../../firebase/cliente';
 import { useParams } from 'react-router-dom';
 import ItemListMesa from '../ItemListMesa/ItemListMesa';
 import Swal from 'sweetalert2';
-import styles from './MesaDetailModal';
+import styles from './MesaDetail';
 
 const MesaDetail = () => {
   const { id } = useParams(); // Obtener el id de los parámetros de la URL
@@ -44,7 +44,6 @@ const MesaDetail = () => {
   }, [id]);
 
   // Función para manejar la adición de productos a la mesa
-  // Dentro del componente MesaDetail
   const handleAddToMesa = async ({ nombre, precio, cantidad }) => {
     try {
       const mesaRef = doc(db, 'mesas', id);
@@ -64,50 +63,56 @@ const MesaDetail = () => {
     }
   };
 
-  const handleEliminarProducto = (index) => {
-    Swal.fire({
-      title: '¿Cuántos productos deseas eliminar?',
-      input: 'number',
-      inputAttributes: {
-        min: '0',
-        step: '1',
-      },
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-      inputValidator: (value) => {
-        if (!value) {
-          return 'Debes ingresar una cantidad';
-        }
-        if (value < 0) {
-          return 'La cantidad debe ser mayor o igual a cero';
-        }
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const cantidadEliminar = parseInt(result.value); // Convertir la cantidad a un número entero
-        if (cantidadEliminar === 0) {
-          // Si la cantidad a eliminar es 0, eliminar el producto completo
-          const productosActualizados = productosMesa.filter((_, i) => i !== index);
-          actualizarProductosMesa(productosActualizados);
-        } else {
-          // Si la cantidad a eliminar es mayor que 0, actualizar la cantidad del producto
-          const productosActualizados = [...productosMesa];
-          productosActualizados[index].cantidad -= cantidadEliminar;
-          actualizarProductosMesa(productosActualizados);
-        }
+  // Función para modificar la cantidad de un producto en la mesa
+const handleModificarCantidad = async (index) => {
+  Swal.fire({
+    title: 'Modificar cantidad',
+    input: 'number',
+    inputAttributes: {
+      min: '0',
+      step: '1',
+    },
+    showCancelButton: true,
+    confirmButtonText: 'Modificar',
+    cancelButtonText: 'Cancelar',
+    inputValidator: (value) => {
+      if (!value) {
+        return 'Debes ingresar una cantidad';
       }
-    });
+      if (value < 0) {
+        return 'La cantidad debe ser mayor o igual a cero';
+      }
+    },
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const nuevaCantidad = parseInt(result.value); // Convertir la cantidad a un número entero
+      const productosActualizados = [...productosMesa];
+      productosActualizados[index].cantidad = nuevaCantidad;
+
+      // Actualizar la cantidad en Firebase
+      await actualizarProductosMesa(productosActualizados);
+
+      // Actualizar el estado local para que la vista refleje el cambio
+      setProductosMesa(productosActualizados);
+    }
+  });
+};
+
+  // Función para eliminar un producto de la mesa
+  const handleEliminarProducto = async (index) => {
+    const productosActualizados = [...productosMesa];
+    productosActualizados.splice(index, 1);
+    await actualizarProductosMesa(productosActualizados);
   };
 
-
+  // Función para actualizar los productos de la mesa en Firebase
   const actualizarProductosMesa = async (nuevosProductos) => {
     try {
       const mesaRef = doc(db, 'mesas', id);
       await updateDoc(mesaRef, { productos: nuevosProductos });
-      console.log('Producto(s) eliminado(s) de la mesa exitosamente.');
+      console.log('Producto(s) actualizado(s) exitosamente.');
     } catch (error) {
-      console.error('Error al eliminar el producto de la mesa:', error);
+      console.error('Error al actualizar los productos de la mesa:', error);
     }
   };
 
@@ -123,14 +128,14 @@ const MesaDetail = () => {
             <p>Estado: {mesa.estado ? 'Abierta' : 'Cerrada'}</p>
             <h2>Productos en la mesa:</h2>
             {productosMesa.map((producto, index) => (
-              <div key={index}>
-                <p>{producto.nombre}</p>
-                <p>{producto.stock}</p>
-                <p>{producto.precio}</p>
-                <button onClick={() => handleEliminarProducto(index)}>Eliminar</button>
-                {/* Mostrar otros detalles del producto si es necesario */}
-              </div>
-            ))}
+  <div key={index}>
+    <p>Producto: {producto.nombre}</p>
+    <p>Precio: ${producto.precio}</p>
+    <p>Cantidad: {producto.cantidad.cantidad}</p> {/* Solo renderizando la cantidad */}
+    <button onClick={() => handleEliminarProducto(index)}>X</button>
+    <button onClick={() => handleModificarCantidad(index)}>Modificar</button>
+  </div>
+))}
           </div>
           <div className={styles.listaProductos}>
             <h2>Productos Disponibles:</h2>

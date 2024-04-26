@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { CollectionReference, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/cliente';
 import styles from './MesaDetailModal.module.css'; // Importa los estilos del módulo CSS
 
