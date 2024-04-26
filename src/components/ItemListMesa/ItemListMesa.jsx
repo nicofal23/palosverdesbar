@@ -46,37 +46,24 @@ const ItemListMesa = ({ greeting, mesaId }) => {
 
   const addToMesa = async (producto) => {
     try {
-        const mesaRef = doc(db, 'mesas', mesaId);
-        const mesaSnapshotPromise = getDoc(mesaRef); // Removed await here
-        const productoExistenteIndexPromise = mesaSnapshotPromise.then(mesaSnapshot => {
-            const mesaData = mesaSnapshot.data();
-            return mesaData.productos.findIndex(item => item.id === producto.id);
-        }); // Removed await here
-        
-        const [mesaSnapshot, productoExistenteIndex] = await Promise.all([mesaSnapshotPromise, productoExistenteIndexPromise]);
-
-        const mesaData = mesaSnapshot.data();
-        
-        if (productoExistenteIndex !== -1) {
-            const productosActualizados = [...mesaData.productos];
-            const productoExistente = productosActualizados[productoExistenteIndex];
-            
-            // Agregar la cantidad seleccionada al objeto del producto
-            productoExistente.cantidad = producto.cantidad;
-            
-            // Actualizar el producto en la lista de productos
-            productosActualizados[productoExistenteIndex] = productoExistente;
-
-            updateDoc(mesaRef, { productos: productosActualizados }); // Removed await here
-        } else {
-            const nuevosProductos = [...(mesaData.productos || []), { ...producto }];
-            
-            updateDoc(mesaRef, { productos: nuevosProductos }); // Removed await here
-        }
+      const mesaRef = doc(db, 'mesas', mesaId);
+      const mesaSnapshot = await getDoc(mesaRef);
+      const mesaData = mesaSnapshot.data();
+  
+      // Agregar el nuevo producto a la lista de productos de la mesa
+      const nuevosProductos = [...(mesaData.productos || []), producto];
+  
+      // Actualizar la lista de productos de la mesa con los nuevos productos
+      await updateDoc(mesaRef, { productos: nuevosProductos });
+  
+      console.log('Producto agregado a la mesa exitosamente.');
     } catch (error) {
-        console.error('Error al agregar el producto a la mesa:', error);
+      console.error('Error al agregar el producto a la mesa:', error);
     }
-};
+  };
+  
+  
+  
 
 
 

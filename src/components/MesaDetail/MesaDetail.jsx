@@ -79,7 +79,7 @@ const MesaDetail = () => {
           
           {/* Mostrar la lista de productos disponibles para agregar */}
           <h2>Productos Disponibles:</h2>
-          <ItemListMesa greeting="Lista de Productos" mesaId={id} />
+          <ItemListMesa greeting="Lista de Productos" mesaId={id} onAdd={handleAddToMesa}/>
         </div>
       ) : (
         <p>No se encontró la mesa</p>
