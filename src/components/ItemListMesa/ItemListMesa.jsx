@@ -51,7 +51,10 @@ const ItemListMesa = ({ greeting, mesaId }) => {
       const mesaData = mesaSnapshot.data();
   
       // Agregar el nuevo producto a la lista de productos de la mesa
-      const nuevosProductos = [...(mesaData.productos || []), producto];
+      const nuevosProductos = [
+        ...(mesaData.productos || []),
+        { nombre: producto.nombre, cantidad: producto.cantidad }
+      ];
   
       // Actualizar la lista de productos de la mesa con los nuevos productos
       await updateDoc(mesaRef, { productos: nuevosProductos });
@@ -61,6 +64,7 @@ const ItemListMesa = ({ greeting, mesaId }) => {
       console.error('Error al agregar el producto a la mesa:', error);
     }
   };
+  
   
   return (
     <div className={style.container}>

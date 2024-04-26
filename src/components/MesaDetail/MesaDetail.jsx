@@ -44,14 +44,13 @@ const MesaDetail = () => {
   }, [id]);
 
   // Función para manejar la adición de productos a la mesa
-  const handleAddToMesa = async ({ nombre, precio, cantidad }) => {
+  const handleAddToMesa = async ({ nombre, precio }) => {
     try {
       const mesaRef = doc(db, 'mesas', id);
       await updateDoc(mesaRef, {
         productos: arrayRemove({
           nombre,
           precio,
-          cantidad
         })
       });
       console.log('Producto agregado a la mesa exitosamente.');
