@@ -124,21 +124,45 @@ const MesaDetail = () => {
 
       // Generar el detalle de la mesa en PDF
       const pdf = new jsPDF();
-      pdf.text('Detalle de la Mesa', 10, 10);
-      pdf.text(`Número de Mesa: ${mesa.numeroMesa}`, 10, 20);
-      pdf.text(`Fecha de Creación: ${mesa.createdAt ? new Date(mesa.createdAt.seconds * 1000).toLocaleString() : 'No disponible'}`, 10, 30);
-      pdf.text('Productos en la mesa:', 10, 40);
+      pdf.text('Detalle del Ticket', 50, 10);
+      pdf.text(`Socio: ${mesa.nombreSocio}`, 10, 20);
+      pdf.text(`Número de Mesa: ${mesa.numeroMesa}`, 10, 30);
+      pdf.text(`Fecha: ${mesa.createdAt ? new Date(mesa.createdAt.seconds * 1000).toLocaleString() : 'No disponible'}`, 10, 40);
+      pdf.text('Productos consumidos:', 10, 50);
       productosMesa.forEach((producto, index) => {
-        pdf.text(`${index + 1}. Producto: ${producto.nombre}, Precio: ${producto.precio}, Cantidad: ${producto.cantidad}`, 10, 50 + index * 10);
+        pdf.text(`${index + 1}. Producto: ${producto.nombre},     Precio: $${producto.precio},     Cantidad: ${producto.cantidad}`, 10, 60 + index * 10);
       });
-      pdf.text(`Total: ${totalCompra}`, 10, 60 + productosMesa.length * 10);
-      pdf.save(`Detalle_Mesa_${mesa.numeroMesa}.pdf`);
+      pdf.text(`Total: $${totalCompra}`, 90, 80 + productosMesa.length * 10);
+      pdf.save(`Ticket_Mesa_${mesa.numeroMesa}.pdf`);
 
       console.log('Mesa cerrada y detalle descargado en PDF exitosamente.');
     } catch (error) {
       console.error('Error al cerrar la mesa:', error);
     }
   };
+
+  // Función para reimprimir el ticket
+ // Función para reimprimir el ticket
+const handleReimprimirTicket = async () => {
+  try {
+    const pdf = new jsPDF();
+    pdf.text('Detalle del Ticket', 50, 10);
+      pdf.text(`Socio: ${mesa.nombreSocio}`, 10, 20);
+      pdf.text(`Número de Mesa: ${mesa.numeroMesa}`, 10, 30);
+      pdf.text(`Fecha: ${mesa.createdAt ? new Date(mesa.createdAt.seconds * 1000).toLocaleString() : 'No disponible'}`, 10, 40);
+      pdf.text('Productos consumidos:', 10, 50);
+      productosMesa.forEach((producto, index) => {
+        pdf.text(`${index + 1}. Producto: ${producto.nombre},     Precio: $${producto.precio},     Cantidad: ${producto.cantidad}`, 10, 60 + index * 10);
+      });
+      pdf.text(`Total: $${totalCompra}`, 90, 80 + productosMesa.length * 10);
+      pdf.save(`Ticket_Mesa_${mesa.numeroMesa}.pdf`);
+
+    console.log('Ticket reimprimido exitosamente.');
+  } catch (error) {
+    console.error('Error al reimprimir el ticket:', error);
+  }
+};
+
 
   // Calcular el total de la compra
   const totalCompra = productosMesa.reduce((total, producto) => {
@@ -178,6 +202,9 @@ const MesaDetail = () => {
             <p className={styles.parrafo}>Total: ${totalCompra}</p> {/* Mostrar el total de la compra */}
             {mesa.estado && (
               <button onClick={handleCerrarMesa}>Cerrar Mesa</button>
+            )}
+            {!mesa.estado && (
+              <button onClick={handleReimprimirTicket}>Reimprimir Ticket</button>
             )}
           </div>
           {mesa.estado && (
