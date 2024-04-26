@@ -39,39 +39,49 @@ const FormularioCargaDatos = () => {
     setLoading(true);
   
     try {
-      if (img) {
+      let imgUrl = ''; // Variable para almacenar la URL de la imagen
+  
+      // Si no se selecciona ninguna imagen, utiliza la imagen del logo por defecto
+      if (!img) {
+        // Define la URL de la imagen del logo predeterminado
+        const defaultImgUrl = 'https://firebasestorage.googleapis.com/v0/b/palosverdes-a3ee3.appspot.com/o/images%2Fpalos.png?alt=media&token=6cd016f1-d972-4356-b023-5797bd9a7235'; // Reemplaza 'URL_DEL_LOGO_POR_DEFECTO' con la URL real de tu imagen predeterminada
+        imgUrl = defaultImgUrl;
+      } else {
+        // Si se selecciona una imagen, cárgala al almacenamiento y obtén su URL
         const storageRef = ref(storage, 'images/' + img.name);
         await uploadBytes(storageRef, img);
-        const imgUrl = await getDownloadURL(storageRef);
-        const docRef = await addDoc(collection(db, 'productos'), {
-          category,
-          subnombre, // Agregar el subnombre a la base de datos
-          descripcion,
-          img: imgUrl,
-          nombre,
-          precio,
-          stock, // Agregar el stock a la base de datos
-          tags // Almacenar los tags en la base de datos
-        });
-        console.log('Document written with ID: ', docRef.id);
-        setCategory('');
-        setSubnombre('');
-        setDescripcion('');
-        setImg(null);
-        setNombre('');
-        setPrecio('');
-        setTags([]);
-        setStock(0); // Restablecer el stock después de agregar el producto
-      } else {
-        console.error('Error: No se seleccionó ningún archivo de imagen.');
+        imgUrl = await getDownloadURL(storageRef);
       }
+  
+      // Agrega los datos del producto a Firestore
+      const docRef = await addDoc(collection(db, 'productos'), {
+        category,
+        subnombre, // Agregar el subnombre a la base de datos
+        descripcion,
+        img: imgUrl, // Utiliza la URL de la imagen obtenida
+        nombre,
+        precio,
+        stock, // Agregar el stock a la base de datos
+        tags // Almacenar los tags en la base de datos
+      });
+  
+      console.log('Document written with ID: ', docRef.id);
+      // Restablecer los estados después de agregar el producto
+      setCategory('');
+      setSubnombre('');
+      setDescripcion('');
+      setImg(null);
+      setNombre('');
+      setPrecio('');
+      setTags([]);
+      setStock(0);
     } catch (error) {
       console.error('Error adding document: ', error);
     } finally {
       setLoading(false);
     }
   };
-
+  
   // Opciones de subnombre según la categoría seleccionada
   const subnombreOptions = {
     restaurant: ['entrada', 'ensalada', 'pastas', 'carnes', 'woks', 'sándwich', 'postres', 'bebidas sin alcohol', 'bebidas con alcohol'],
@@ -80,6 +90,7 @@ const FormularioCargaDatos = () => {
     cocktails: ['aperitivos', 'campari', 'gin', 'otros']
   };
 
+  
   return (
     <form className={style.form} onSubmit={handleSubmit}>
       <label>
