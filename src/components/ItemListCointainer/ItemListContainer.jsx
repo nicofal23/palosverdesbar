@@ -12,15 +12,15 @@ const ItemListContainer = ({ greeting }) => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { categoryId } = useParams();
-  const history = useNavigate();
+  const navigate = useNavigate();
   const subnombreButtonsRef = useRef(null);
   const [scrollLeft, setScrollLeft] = useState(0);
 
   useEffect(() => {
     setLoading(true);
 
-    const collectionRef = selectedCategory
-      ? query(collection(db, 'productos'), where('category', '==', selectedCategory))
+    const collectionRef = categoryId
+      ? query(collection(db, 'productos'), where('category', '==', categoryId))
       : collection(db, 'productos');
 
     getDocs(collectionRef)
@@ -47,15 +47,29 @@ const ItemListContainer = ({ greeting }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [selectedCategory]);
+  }, [categoryId]);
+
+  useEffect(() => {
+    const handlePopstate = () => {
+      // Recargar la página cuando se detecta un cambio en el historial de navegación (por ejemplo, al hacer clic en el botón de volver del navegador)
+      window.location.reload();
+    };
+
+    window.addEventListener('popstate', handlePopstate);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopstate);
+    };
+  }, []);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
+    navigate(`/${category}`); // Usa navigate en lugar de history.push
   };
 
   const handleReturnClick = () => {
-    setSelectedCategory(null);
-    history.goBack();
+    setSelectedCategory(null); // Resetear la categoría seleccionada
+    navigate('/'); // Redirigir a la página de inicio
   };
 
   const handleSubnombreClick = (subnombre) => {
@@ -71,7 +85,6 @@ const ItemListContainer = ({ greeting }) => {
       setScrollLeft(scrollLeft + scrollOffset);
     }
   };
-
   return (
     <div className={style.container}>
       <div className={style.row}>
