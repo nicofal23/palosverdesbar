@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { db } from '../../firebase/cliente';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import style from './FormularioCargaDatos.module.css'; 
-import { storage } from '../../firebase/cliente'; 
+import style from './FormularioCargaDatos.module.css';
+import { storage } from '../../firebase/cliente';
+import Swal from 'sweetalert2'; // Importar SweetAlert
 
 const FormularioCargaDatos = () => {
   const [category, setCategory] = useState('');
-  const [subnombre, setSubnombre] = useState(''); // Estado para el subnombre
+  const [subnombre, setSubnombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
-  const [img, setImg] = useState(null); 
+  const [img, setImg] = useState(null);
   const [nombre, setNombre] = useState('');
   const [precio, setPrecio] = useState('');
-  const [tags, setTags] = useState([]); // Cambiado a un array para almacenar múltiples tags seleccionados
+  const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [stock, setStock] = useState(0); // Estado para el stock
+  const [stock, setStock] = useState(0);
 
   const handleImgChange = (e) => {
     const file = e.target.files[0];
@@ -23,13 +24,10 @@ const FormularioCargaDatos = () => {
 
   const handleTagChange = (e) => {
     const { value } = e.target;
-    // Verificar si el tag ya está seleccionado
     const alreadySelected = tags.includes(value);
     if (alreadySelected) {
-      // Si está seleccionado, eliminarlo de la lista de tags
       setTags(tags.filter(tag => tag !== value));
     } else {
-      // Si no está seleccionado, agregarlo a la lista de tags
       setTags([...tags, value]);
     }
   };
@@ -37,52 +35,62 @@ const FormularioCargaDatos = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     try {
-      let imgUrl = ''; // Variable para almacenar la URL de la imagen
-  
-      // Si no se selecciona ninguna imagen, utiliza la imagen del logo por defecto
+      let imgUrl = '';
+
       if (!img) {
-        // Define la URL de la imagen del logo predeterminado
-        const defaultImgUrl = 'https://firebasestorage.googleapis.com/v0/b/palosverdes-a3ee3.appspot.com/o/images%2Fpalos.png?alt=media&token=6cd016f1-d972-4356-b023-5797bd9a7235'; // Reemplaza 'URL_DEL_LOGO_POR_DEFECTO' con la URL real de tu imagen predeterminada
+        const defaultImgUrl = 'https://firebasestorage.googleapis.com/v0/b/palosverdes-a3ee3.appspot.com/o/images%2Fpalos.png?alt=media&token=6cd016f1-d972-4356-b023-5797bd9a7235';
         imgUrl = defaultImgUrl;
       } else {
-        // Si se selecciona una imagen, cárgala al almacenamiento y obtén su URL
         const storageRef = ref(storage, 'images/' + img.name);
         await uploadBytes(storageRef, img);
         imgUrl = await getDownloadURL(storageRef);
       }
-  
-      // Agrega los datos del producto a Firestore
+
       const docRef = await addDoc(collection(db, 'productos'), {
         category,
-        subnombre, // Agregar el subnombre a la base de datos
+        subnombre,
         descripcion,
-        img: imgUrl, // Utiliza la URL de la imagen obtenida
+        img: imgUrl,
         nombre,
         precio,
-        stock, // Agregar el stock a la base de datos
-        tags // Almacenar los tags en la base de datos
+        stock,
+        tags
       });
-  
+
       console.log('Document written with ID: ', docRef.id);
-      // Restablecer los estados después de agregar el producto
-      setCategory('');
-      setSubnombre('');
-      setDescripcion('');
-      setImg(null);
-      setNombre('');
-      setPrecio('');
-      setTags([]);
-      setStock(0);
+
+      // Mostrar SweetAlert de éxito
+      Swal.fire({
+        icon: 'success',
+        title: '¡Producto agregado!',
+        text: 'El producto se ha agregado correctamente.',
+      }).then(() => {
+        // Restablecer los estados después de agregar el producto
+        setCategory('');
+        setSubnombre('');
+        setDescripcion('');
+        setImg(null);
+        setNombre('');
+        setPrecio('');
+        setTags([]);
+        setStock(0);
+      });
     } catch (error) {
       console.error('Error adding document: ', error);
+
+      // Mostrar SweetAlert de error
+      Swal.fire({
+        icon: 'error',
+        title: '¡Error!',
+        text: 'Hubo un problema al agregar el producto. Por favor, intenta nuevamente más tarde.',
+      });
     } finally {
       setLoading(false);
     }
   };
-  
-  // Opciones de subnombre según la categoría seleccionada
+
   const subnombreOptions = {
     restaurant: ['entrada', 'ensalada', 'pastas', 'carnes', 'woks', 'sándwich', 'postres', 'bebidas sin alcohol', 'bebidas con alcohol'],
     cafeteria: ['desayuno y merienda', 'tortas', 'cafetería clásica'],
@@ -90,7 +98,6 @@ const FormularioCargaDatos = () => {
     cocktails: ['aperitivos', 'campari', 'gin', 'otros']
   };
 
-  
   return (
     <form className={style.form} onSubmit={handleSubmit}>
       <label>
@@ -103,7 +110,6 @@ const FormularioCargaDatos = () => {
           <option value="vinos">Vinos</option>
         </select>
       </label>
-      {/* Agregar el select para subnombre */}
       {category && (
         <label>
           Subnombre:
@@ -161,5 +167,5 @@ const FormularioCargaDatos = () => {
     </form>
   );
 };
- 
+
 export default FormularioCargaDatos;
