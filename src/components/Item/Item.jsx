@@ -1,9 +1,14 @@
-// item.jsx
+// Item.jsx
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../Item/Item.module.css';
 
-const Item = ({ id, nombre, img, precio, stock, descripcion}) => {
+const Item = ({ id, nombre, img, precio, stock, descripcion }) => {
     const isStockAvailable = stock > 0;
+
+    // Obtener los primeros 19 caracteres de la descripción
+    const shortDescription = descripcion.slice(0, 19);
+    const remainingDescription = descripcion.slice(19);
 
     return (
         <article className={styles.CardItem}>
@@ -13,10 +18,16 @@ const Item = ({ id, nombre, img, precio, stock, descripcion}) => {
                         {nombre}
                     </h2>
                     <p className={styles.ItemDescription}>
-                         {descripcion}
+                        {/* Mostrar los primeros 19 caracteres de la descripción */}
+                        {shortDescription}
+                        {descripcion.length > 19 && (
+                            <Link to={`/item/${id}`} className={styles.ViewMore}>
+                                ...ver más
+                            </Link>
+                        )}
                     </p>
                     <p className={styles.Precio}>
-                         ${precio} 
+                        ${precio}
                     </p>
                 </div>
                 <footer className={styles.ItemFooter}>

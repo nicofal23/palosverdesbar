@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getStorage, ref, deleteObject } from "firebase/storage";
+import { getStorage, ref, deleteObject, getDownloadURL, uploadBytes } from "firebase/storage"; // Importa getDownloadURL desde el módulo storage
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAMDkbwz5ADBUG3dW0kzYcPDfoLxvErq1E",
@@ -20,4 +21,4 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-export { auth, db, storage, signInWithEmailAndPassword, ref, deleteObject }; // Asegúrate de exportar deleteObject aquí
+export { auth, db, storage, signInWithEmailAndPassword, ref, deleteObject, getDownloadURL, uploadBytes };
