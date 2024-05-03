@@ -135,7 +135,7 @@ const MesaDetail = () => {
         pdf.text(`${index + 1}. Producto: ${producto.nombre},     Precio: $${producto.precio},     Cantidad: ${producto.cantidad}`, 10, 60 + index * 10);
       });
       pdf.text(`Total: $${totalCompra}`, 90, 80 + productosMesa.length * 10);
-      pdf.save(`Ticket_Mesa_${mesa.numeroMesa}.pdf`);
+      pdf.save(`Mesa_${mesa.numeroMesa}_${mesa.nombreSocio}.pdf`);
 
       console.log('Mesa cerrada y detalle descargado en PDF exitosamente.');
     } catch (error) {
