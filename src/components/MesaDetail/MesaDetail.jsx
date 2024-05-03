@@ -45,16 +45,16 @@ const MesaDetail = () => {
   }, [id]);
 
   // Función para manejar la adición de productos a la mesa
-  const handleAddToMesa = async ({ nombre, precio }) => {
+  const handleAddToMesa = async ({ nombre, precio }, cantidadSeleccionada) => {
     try {
       const mesaRef = doc(db, 'mesas', id);
       // Actualizar en Firestore
       await updateDoc(mesaRef, {
-        productos: [...productosMesa, { nombre, precio, cantidad: 1 }]
+        productos: [...productosMesa, { nombre, precio, cantidad: cantidadSeleccionada }]
       });
   
       // Actualizar el estado local después de la actualización en Firestore
-      setProductosMesa([...productosMesa, { nombre, precio, cantidad: 1 }]);
+      setProductosMesa([...productosMesa, { nombre, precio, cantidad: cantidadSeleccionada }]);
       console.log('Producto agregado a la mesa exitosamente.');
     } catch (error) {
       console.error('Error al agregar el producto a la mesa:', error);
