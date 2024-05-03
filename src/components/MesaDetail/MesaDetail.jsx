@@ -48,17 +48,19 @@ const MesaDetail = () => {
   const handleAddToMesa = async ({ nombre, precio }) => {
     try {
       const mesaRef = doc(db, 'mesas', id);
+      // Actualizar en Firestore
       await updateDoc(mesaRef, {
         productos: [...productosMesa, { nombre, precio, cantidad: 1 }]
       });
-      console.log('Producto agregado a la mesa exitosamente.');
-
-      // Actualizar la lista de productos de la mesa después de agregar el producto
+  
+      // Actualizar el estado local después de la actualización en Firestore
       setProductosMesa([...productosMesa, { nombre, precio, cantidad: 1 }]);
+      console.log('Producto agregado a la mesa exitosamente.');
     } catch (error) {
       console.error('Error al agregar el producto a la mesa:', error);
     }
   };
+  
 
   // Función para modificar la cantidad de un producto en la mesa
   const handleModificarCantidad = async (index) => {
@@ -210,7 +212,13 @@ const handleReimprimirTicket = async () => {
           {mesa.estado && (
             <div className={styles.listaProductos}>
               <h2>Productos Disponibles:</h2>
-              <ItemListMesa greeting="Lista de Productos" mesaId={id} onAdd={handleAddToMesa}/>
+              <ItemListMesa
+  greeting="Lista de Productos"
+  mesaId={id}
+  onAddToMesa={handleAddToMesa}
+  updateProductosMesa={setProductosMesa} // Pasar la función de actualización
+/>
+
             </div>
           )}
         </div>

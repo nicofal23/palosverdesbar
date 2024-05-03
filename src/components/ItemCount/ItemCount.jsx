@@ -1,4 +1,4 @@
-// ItemCount.js
+// En ItemCount.js
 import React, { useState } from 'react';
 import styles from './ItemCount.module.css'
 
@@ -16,7 +16,7 @@ const ItemCount = ({ inicial, onAdd }) => {
   };
 
   const handleOnAdd = () => {
-    onAdd(count);
+    onAdd(count); // Pasar la cantidad seleccionada a la función onAdd
   };
 
   return (
@@ -27,7 +27,7 @@ const ItemCount = ({ inicial, onAdd }) => {
           <button onClick={handleAdd} className={styles.button}>+</button>
       </div>
       <div className={styles.continerAgregar}>
-        <button onClick={handleOnAdd} className={styles.agregar}>Agregar</button>
+        <button  type="button" onClick={handleOnAdd} className={styles.agregar}>Agregar</button>
       </div>
     </div>
   );

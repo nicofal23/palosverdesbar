@@ -44,29 +44,32 @@ const ItemListMesa = ({ greeting, mesaId, onAddToMesa, productosMesa }) => {
     );
   }
 
-  const addToMesa = async (producto, cantidadSeleccionada) => {
-    try {
-      const mesaRef = doc(db, 'mesas', mesaId);
-      const mesaSnapshot = await getDoc(mesaRef);
-      const mesaData = mesaSnapshot.data();
-  
-      // Agregar el nuevo producto a la lista de productos de la mesa
-      const nuevosProductos = [
-        ...(mesaData.productos || []),
-        { nombre: producto.nombre, precio: producto.precio, cantidad: cantidadSeleccionada }
-      ];
-  
-      // Actualizar la lista de productos de la mesa con los nuevos productos
-      await updateDoc(mesaRef, { productos: nuevosProductos });
-  
-      console.log('Producto agregado a la mesa exitosamente.');
+  // En ItemListMesa.js
+const addToMesa = async (producto, cantidadSeleccionada) => {
+  try {
+    const mesaRef = doc(db, 'mesas', mesaId);
+    const mesaSnapshot = await getDoc(mesaRef);
+    const mesaData = mesaSnapshot.data();
 
-      // Llamar a la función para actualizar la lista de productos en MesaDetail
-      onAddToMesa();
-    } catch (error) {
-      console.error('Error al agregar el producto a la mesa:', error);
-    }
-  };
+    // Agregar el nuevo producto a la lista de productos de la mesa
+    const nuevosProductos = [
+      ...(mesaData.productos || []),
+      { nombre: producto.nombre, precio: producto.precio, cantidad: cantidadSeleccionada }
+    ];
+
+    // Actualizar la lista de productos de la mesa con los nuevos productos en Firestore
+    await updateDoc(mesaRef, { productos: nuevosProductos });
+
+    console.log('Producto agregado a la mesa exitosamente.');
+
+    // Utilizar la función de adición a la mesa pasada como prop
+    onAddToMesa(producto, cantidadSeleccionada);
+  } catch (error) {
+    console.error('Error al agregar el producto a la mesa:', error);
+  }
+};
+
+  
   
   
   return (
