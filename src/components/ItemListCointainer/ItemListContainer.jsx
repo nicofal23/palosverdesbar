@@ -6,6 +6,8 @@ import { groupBy } from 'lodash'; // Importar groupBy desde lodash
 import ItemList from '../ItemList/ItemList';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import style from '../ItemListCointainer/ItemListContainer.module.css';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { styled } from '@mui/system';
 
 const ItemListContainer = ({ greeting }) => {
   const [productos, setProductos] = useState([]);
@@ -68,10 +70,8 @@ const ItemListContainer = ({ greeting }) => {
   };
 
   const handleReturnClick = () => {
-    setSelectedCategory(null); // Resetear la categoría seleccionada
-    navigate('/'); // Redirigir a la página de inicio
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Llevar al usuario arriba de la pantalla
   };
-
   const handleSubnombreClick = (subnombre) => {
     const element = document.getElementById(subnombre);
     if (element) {
@@ -85,6 +85,12 @@ const ItemListContainer = ({ greeting }) => {
       setScrollLeft(scrollLeft + scrollOffset);
     }
   };
+
+  // Estilos personalizados para el icono
+  const ThickArrowUpwardIcon = styled(ExpandLessIcon)({
+    fontSize: '36px', // Tamaño más grande
+    fontWeight: 'bold', // Hacer el icono más grueso
+  });
 
   return (
     <div className={style.container}>
@@ -112,8 +118,11 @@ const ItemListContainer = ({ greeting }) => {
               )}
               {selectedCategory !== null && (
                 <div>
-                  <button className={style.buttonreturn} onClick={handleReturnClick}>Volver</button>
-                </div>
+                <button className={style.buttonreturn} onClick={handleReturnClick}>
+                  <ThickArrowUpwardIcon /> {/* Aquí se añade el icono */}
+                </button>
+              </div>
+              
               )}
             </div>
           </div>
