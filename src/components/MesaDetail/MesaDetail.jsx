@@ -44,24 +44,53 @@ const MesaDetail = () => {
     fetchMesa();
   }, [id]);
 
-  // Función para manejar la adición de productos a la mesa
-  const handleAddToMesa = async ({ nombre, precio }, cantidadSeleccionada) => {
-    try {
-      const mesaRef = doc(db, 'mesas', id);
+ // Función para manejar la adición de productos a la mesa
+const handleAddToMesa = async ({ nombre, precio }, cantidadSeleccionada) => {
+  try {
+    const mesaRef = doc(db, 'mesas', id);
+    // Verificar si el producto ya está en la lista de productos de la mesa
+    const productoExistenteIndex = productosMesa.findIndex(producto => producto.nombre === nombre);
+
+    if (productoExistenteIndex !== -1) {
+      // Producto existente: mostrar un alert para preguntar si desea agregar más
+      Swal.fire({
+        title: 'Producto existente',
+        text: 'El producto ya está en la mesa. ¿Desea agregar más?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          // Agregar más cantidad del producto existente
+          const nuevaCantidad = parseInt(cantidadSeleccionada);
+          const productosActualizados = [...productosMesa];
+          productosActualizados[productoExistenteIndex].cantidad += nuevaCantidad;
+
+          // Actualizar la cantidad en Firebase
+          await actualizarProductosMesa(productosActualizados);
+
+          // Actualizar el estado local para que la vista refleje el cambio
+          setProductosMesa(productosActualizados);
+        }
+      });
+    } else {
+      // Producto no existente: agregar como un nuevo producto a la mesa
       // Actualizar en Firestore
       await updateDoc(mesaRef, {
         productos: [...productosMesa, { nombre, precio, cantidad: cantidadSeleccionada }]
       });
-  
+
       // Actualizar el estado local después de la actualización en Firestore
       setProductosMesa([...productosMesa, { nombre, precio, cantidad: cantidadSeleccionada }]);
       console.log('Producto agregado a la mesa exitosamente.');
-    } catch (error) {
-      console.error('Error al agregar el producto a la mesa:', error);
     }
-  };
-  
-
+  } catch (error) {
+    console.error('Error al agregar el producto a la mesa:', error);
+  }
+};
   // Función para modificar la cantidad de un producto en la mesa
   const handleModificarCantidad = async (index) => {
     Swal.fire({
@@ -97,15 +126,29 @@ const MesaDetail = () => {
     });
   };
 
-  // Función para eliminar un producto de la mesa
-  const handleEliminarProducto = async (index) => {
-    const productosActualizados = [...productosMesa];
-    productosActualizados.splice(index, 1);
-    await actualizarProductosMesa(productosActualizados);
+ // Función para eliminar un producto de la mesa
+const handleEliminarProducto = (index) => {
+  // Mostrar un alert para confirmar la eliminación
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Una vez eliminado, se quitara el producto de la mesa.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí',
+    cancelButtonText: 'Cancelar'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const productosActualizados = [...productosMesa];
+      productosActualizados.splice(index, 1);
+      await actualizarProductosMesa(productosActualizados);
 
-    // Actualizar el estado local para que la vista refleje el cambio
-    setProductosMesa(productosActualizados);
-  };
+      // Actualizar el estado local para que la vista refleje el cambio
+      setProductosMesa(productosActualizados);
+    }
+  });
+};
 
   // Función para actualizar los productos de la mesa en Firebase
   const actualizarProductosMesa = async (nuevosProductos) => {

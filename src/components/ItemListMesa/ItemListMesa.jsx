@@ -5,6 +5,7 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import style from '../ItemListCointainer/ItemListContainer.module.css';
 import ProductSearch from '../ProductSearch/ProductSearch';
 import ItemMesa from '../Item/ItemMesa';
+import Swal from 'sweetalert2';
 
 const ItemListMesa = ({ greeting, mesaId, onAddToMesa, productosMesa }) => {
   const [productos, setProductos] = useState([]);
@@ -44,33 +45,43 @@ const ItemListMesa = ({ greeting, mesaId, onAddToMesa, productosMesa }) => {
     );
   }
 
-  // En ItemListMesa.js
-const addToMesa = async (producto, cantidadSeleccionada) => {
-  try {
-    const mesaRef = doc(db, 'mesas', mesaId);
-    const mesaSnapshot = await getDoc(mesaRef);
-    const mesaData = mesaSnapshot.data();
+  // Función para mostrar un alert indicando que el producto se ha agregado a la mesa
+  const mostrarAlerta = () => {
+    Swal.fire({
+      title: '¡Producto agregado!',
+      text: 'El producto se ha agregado exitosamente a la mesa.',
+      icon: 'success',
+      confirmButtonText: 'Ok'
+    });
+  };
 
-    // Agregar el nuevo producto a la lista de productos de la mesa
-    const nuevosProductos = [
-      ...(mesaData.productos || []),
-      { nombre: producto.nombre, precio: producto.precio, cantidad: cantidadSeleccionada }
-    ];
+  // Función para agregar el producto a la mesa
+  const addToMesa = async (producto, cantidadSeleccionada) => {
+    try {
+      const mesaRef = doc(db, 'mesas', mesaId);
+      const mesaSnapshot = await getDoc(mesaRef);
+      const mesaData = mesaSnapshot.data();
 
-    // Actualizar la lista de productos de la mesa con los nuevos productos en Firestore
-    await updateDoc(mesaRef, { productos: nuevosProductos });
+      // Agregar el nuevo producto a la lista de productos de la mesa
+      const nuevosProductos = [
+        ...(mesaData.productos || []),
+        { nombre: producto.nombre, precio: producto.precio, cantidad: cantidadSeleccionada }
+      ];
 
-    console.log('Producto agregado a la mesa exitosamente.');
+      // Actualizar la lista de productos de la mesa con los nuevos productos en Firestore
+      await updateDoc(mesaRef, { productos: nuevosProductos });
 
-    // Utilizar la función de adición a la mesa pasada como prop
-    onAddToMesa(producto, cantidadSeleccionada);
-  } catch (error) {
-    console.error('Error al agregar el producto a la mesa:', error);
-  }
-};
+      console.log('Producto agregado a la mesa exitosamente.');
 
-  
-  
+      // Utilizar la función de adición a la mesa pasada como prop
+      onAddToMesa(producto, cantidadSeleccionada);
+
+      // Mostrar el alerta de éxito
+      mostrarAlerta();
+    } catch (error) {
+      console.error('Error al agregar el producto a la mesa:', error);
+    }
+  };
   
   return (
     <div className={style.container}>
@@ -83,14 +94,13 @@ const addToMesa = async (producto, cantidadSeleccionada) => {
             {!loading && filtrarProductos().length > 0 ? (
               filtrarProductos().map((producto) => (
                 <ItemMesa
-  key={producto.id}
-  id={producto.id}
-  nombre={producto.nombre}
-  precio={producto.precio}
-  stock={producto.stock}
-  onAddToCart={(producto, cantidadSeleccionada) => addToMesa(producto, cantidadSeleccionada)} // Pasando producto y cantidadSeleccionada
-/>
-
+                  key={producto.id}
+                  id={producto.id}
+                  nombre={producto.nombre}
+                  precio={producto.precio}
+                  stock={producto.stock}
+                  onAddToCart={(producto, cantidadSeleccionada) => addToMesa(producto, cantidadSeleccionada)} // Pasando producto y cantidadSeleccionada
+                />
               ))
             ) : (
               <p>No hay productos disponibles.</p>
