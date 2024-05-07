@@ -85,6 +85,7 @@ const ItemListContainer = ({ greeting }) => {
       setScrollLeft(scrollLeft + scrollOffset);
     }
   };
+
   return (
     <div className={style.container}>
       <div className={style.row}>
@@ -149,6 +150,12 @@ const ItemListContainer = ({ greeting }) => {
           )}
         </div>
       </div>
+      {/* Botón Kiosko debajo del grid */}
+      {selectedCategory === null && (
+        <div className={`${style.gridkiosko} ${style.kiosko}`} onClick={() => handleCategoryClick('kiosko')}>
+          <button className={style.button}>Kiosko</button>
+        </div>
+      )}
     </div>
   );
 };

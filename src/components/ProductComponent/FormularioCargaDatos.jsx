@@ -95,7 +95,8 @@ const FormularioCargaDatos = () => {
     restaurant: ['entrada', 'ensalada', 'pastas', 'carnes', 'woks', 'sándwich', 'postres', 'bebidas sin alcohol', 'bebidas con alcohol'],
     cafeteria: ['desayuno y merienda', 'tortas', 'cafetería clásica'],
     vinos: ['champagne', 'vinos'],
-    cocktails: ['aperitivos', 'campari', 'gin', 'otros']
+    cocktails: ['aperitivos', 'campari', 'gin', 'otros'],
+    kiosko:['chicle','bebida','limpieza','cocina','mate']
   };
 
   return (
@@ -108,6 +109,7 @@ const FormularioCargaDatos = () => {
           <option value="cocktails">Cocktails</option>
           <option value="cafeteria">Cafetería</option>
           <option value="vinos">Vinos</option>
+          <option value="kiosko">Kiosko</option>
         </select>
       </label>
       {category && (

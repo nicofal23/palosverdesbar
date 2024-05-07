@@ -53,7 +53,7 @@
   background-repeat: no-repeat;
   width: 60%;
   height: 40%;
-  border: 1px solid grey;
+  
   border-radius: 5%;
 }
 
@@ -294,4 +294,23 @@ h3 {
     height: 150px;
     width: 200px;
   }
+}
+
+.kiosko {
+  background-image: url(../../assets/img/kiosko.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: calc(100% + 10px); /* Calcula el ancho del grid sumando el ancho de un cuadrado y el espacio entre cuadrados */
+  height: 100%;
+  border-radius: 5%;
+  margin-right: -10px; /* Aplica un margen negativo igual al espacio entre cuadrados para compensar el espacio adicional */
+}
+.gridkiosko {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 200px;
+    border-radius: 5%;
 }
