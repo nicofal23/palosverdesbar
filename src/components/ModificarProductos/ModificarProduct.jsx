@@ -86,12 +86,24 @@ const ModificarProductos = () => {
             const productoRef = doc(db, "productos", id);
             await updateDoc(productoRef, { img: imageUrl });
             console.log("Imagen del producto actualizada exitosamente.");
-            setNuevaImagen(null); // Limpiar nuevaImagen después de la carga exitosa
-            setProductoModificando(null); // Limpiar productoModificando después de la carga exitosa
-        } catch (error) {
-            console.error("Error al cambiar la imagen del producto:", error);
-        }
+            // Actualizar el estado local de los productos con la nueva URL de la imagen
+        setProductos(prevProductos => {
+            return prevProductos.map(producto => {
+                if (producto.id === id) {
+                    return { ...producto, img: imageUrl };
+                } else {
+                    return producto;
+                }
+            });
+        });
+
+        setNuevaImagen(null); // Limpiar nuevaImagen después de la carga exitosa
+        setProductoModificando(null); // Limpiar productoModificando después de la carga exitosa
+    } catch (error) {
+        console.error("Error al cambiar la imagen del producto:", error);
     }
+}
+
 
     // Función para confirmar la modificación y recargar la página
     const confirmarModificacion = (id) => {
@@ -165,7 +177,7 @@ const ModificarProductos = () => {
                                         ${producto.precio}
                                     </p>
                                     {/* Renderizar el componente ModificarPrecio aquí */}
-                                    <ModificarPrecio producto={producto} />
+                                    <ModificarPrecio producto={producto} updateLocalState={setProductos} />
                                 </div>
                                 <div className={styles.stockOptions}>
                                     <p>Stock:</p>

@@ -25,11 +25,13 @@
 
 .productDescription {
   margin-bottom: 10px;
+  color: black;
 }
 
 .productName {
   font-size: 20px;
   margin-bottom: 5px;
+  color: black;
 }
 
 .productDetails {
@@ -50,6 +52,9 @@
 .stockOptions {
   display: flex;
   align-items: center;
+}
+.stockOptions p{
+  color: black;
 }
 
 .stockBoxes {
