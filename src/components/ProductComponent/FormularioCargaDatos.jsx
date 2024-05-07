@@ -34,11 +34,23 @@ const FormularioCargaDatos = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Verificar que los campos obligatorios estén completos
+    if (!category || !descripcion || !nombre || !precio || !subnombre) {
+      // Mostrar SweetAlert de advertencia
+      Swal.fire({
+        icon: 'warning',
+        title: '¡Atención!',
+        text: 'Por favor, completa todos los campos obligatorios.',
+      });
+      return; // Salir de la función si algún campo está incompleto
+    }
+  
     setLoading(true);
-
+  
     try {
       let imgUrl = '';
-
+  
       if (!img) {
         const defaultImgUrl = 'https://firebasestorage.googleapis.com/v0/b/palosverdes-a3ee3.appspot.com/o/images%2Fpalos.png?alt=media&token=6cd016f1-d972-4356-b023-5797bd9a7235';
         imgUrl = defaultImgUrl;
@@ -47,7 +59,7 @@ const FormularioCargaDatos = () => {
         await uploadBytes(storageRef, img);
         imgUrl = await getDownloadURL(storageRef);
       }
-
+  
       const docRef = await addDoc(collection(db, 'productos'), {
         category,
         subnombre,
@@ -58,9 +70,9 @@ const FormularioCargaDatos = () => {
         stock,
         tags
       });
-
+  
       console.log('Document written with ID: ', docRef.id);
-
+  
       // Mostrar SweetAlert de éxito
       Swal.fire({
         icon: 'success',
@@ -79,7 +91,7 @@ const FormularioCargaDatos = () => {
       });
     } catch (error) {
       console.error('Error adding document: ', error);
-
+  
       // Mostrar SweetAlert de error
       Swal.fire({
         icon: 'error',
