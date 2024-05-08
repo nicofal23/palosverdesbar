@@ -17,6 +17,7 @@ const ItemListContainer = ({ greeting }) => {
   const navigate = useNavigate();
   const subnombreButtonsRef = useRef(null);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [selectedProduct, setSelectedProduct] = useState(null); // Definir el estado para el producto seleccionado
 
   useEffect(() => {
     setLoading(true);
@@ -50,19 +51,6 @@ const ItemListContainer = ({ greeting }) => {
         setLoading(false);
       });
   }, [categoryId]);
-
-  useEffect(() => {
-    const handlePopstate = () => {
-      // Recargar la página cuando se detecta un cambio en el historial de navegación (por ejemplo, al hacer clic en el botón de volver del navegador)
-      window.location.reload();
-    };
-
-    window.addEventListener('popstate', handlePopstate);
-
-    return () => {
-      window.removeEventListener('popstate', handlePopstate);
-    };
-  }, []);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -150,7 +138,8 @@ const ItemListContainer = ({ greeting }) => {
             productos.map((grupo) => (
               <div key={grupo.subnombre} className={style.subnombre}>
                 <h3 id={grupo.subnombre}>{grupo.subnombre}</h3>
-                <ItemList productos={grupo.productos} />
+                {/* Pasar la función setSelectedProduct como prop al componente ItemList */}
+                <ItemList productos={grupo.productos} setSelectedProduct={setSelectedProduct} />
               </div>
             ))
           )}

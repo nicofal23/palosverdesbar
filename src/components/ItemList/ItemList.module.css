@@ -1,23 +1,27 @@
 .ListaGrupo {
-    display: flex;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.CardItem {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estilo para los enlaces */
+.CardItem a {
+  text-decoration: none; /* Quitar el subrayado */
+  color: inherit; /* Heredar el color del texto del padre */
+}
+
+@media (max-width: 767px) {
+  .ListaGrupo {
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1.25rem; 
   }
-  
-  .CardItem {
-    width: 100%; 
-    margin-bottom: 20px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-
-
-  @media (max-width: 767px) {
-    .ListaGrupo {
-      flex-direction: column;
-    }
-  }
+}
