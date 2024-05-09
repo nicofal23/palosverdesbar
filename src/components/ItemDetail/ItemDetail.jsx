@@ -34,7 +34,7 @@ const ItemDetail = () => {
   }, [id]);
 
   const handleReturnClick = () => {
-    navigate('/'); // Navega de regreso a la categoría seleccionada
+    navigate(`/${categoryId}` ); // Navega de regreso a la categoría seleccionada
   };
   
   return (

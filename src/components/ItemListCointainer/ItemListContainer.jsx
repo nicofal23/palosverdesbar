@@ -12,12 +12,9 @@ import { styled } from '@mui/system';
 const ItemListContainer = ({ greeting }) => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const { categoryId } = useParams();
-  const navigate = useNavigate();
   const subnombreButtonsRef = useRef(null);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const [selectedProduct, setSelectedProduct] = useState(null); // Definir el estado para el producto seleccionado
 
   useEffect(() => {
     setLoading(true);
@@ -52,11 +49,6 @@ const ItemListContainer = ({ greeting }) => {
       });
   }, [categoryId]);
 
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    navigate(`/${category}`); // Usa navigate en lugar de history.push
-  };
-
   const handleReturnClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' }); // Llevar al usuario arriba de la pantalla
   };
@@ -89,34 +81,12 @@ const ItemListContainer = ({ greeting }) => {
           {loading && <LoadingSpinner />}
           <div className={style.categoryButtons} style={{ display: loading ? 'none' : 'block' }}>
             <div className={style.gridContainer}>
-              {selectedCategory === null && (
-                <>
-                  <div className={`${style.gridItem} ${style.resto}`} onClick={() => handleCategoryClick('restaurant')}>
-                    <button className={style.button}>Restaurant</button>
-                  </div>
-                  <div className={`${style.gridItem} ${style.cafe}`}>
-                    <button className={style.button} onClick={() => handleCategoryClick('cafeteria')}>Cafeteria</button>
-                  </div>
-                  <div className={`${style.gridItem} ${style.cock}`}>
-                    <button className={style.button} onClick={() => handleCategoryClick('cocktails')}>Cocktails</button>
-                  </div>
-                  <div className={`${style.gridItem} ${style.vino}`}>
-                    <button className={style.button} onClick={() => handleCategoryClick('vinos')}>Vinos y Espumantes</button>
-                  </div>
-                </>
-              )}
-              {selectedCategory !== null && (
-                <div>
-                  <button className={style.buttonreturn} onClick={handleReturnClick}>
-                    <ThickArrowUpwardIcon /> {/* Aquí se añade el icono */}
-                  </button>
-                </div>
-              )}
+              {/* No hay selección de categoría en este componente */}
             </div>
           </div>
 
           {/* Aquí creamos los botones de los subnombres */}
-          {selectedCategory !== null && !loading && productos.length > 0 && (
+          {loading ? null : productos.length > 0 && (
             <div className={style.subnombreButtonsContainer}>
               <button className={`${style.arrowButton} ${style.arrowLeft}`} onClick={() => scroll(-100)} disabled={scrollLeft === 0}>
                 {'<'}
@@ -134,26 +104,24 @@ const ItemListContainer = ({ greeting }) => {
             </div>
           )}
 
-          {selectedCategory !== null && !loading && productos.length > 0 && (
+          {!loading && productos.length > 0 && (
             productos.map((grupo) => (
               <div key={grupo.subnombre} className={style.subnombre}>
                 <h3 id={grupo.subnombre}>{grupo.subnombre}</h3>
                 {/* Pasar la función setSelectedProduct como prop al componente ItemList */}
-                <ItemList productos={grupo.productos} setSelectedProduct={setSelectedProduct} />
+                <ItemList productos={grupo.productos} categoryId={categoryId} />
               </div>
             ))
           )}
-          {selectedCategory !== null && !loading && productos.length === 0 && (
+          {!loading && productos.length === 0 && (
             <p>No hay productos disponibles en esta categoría.</p>
           )}
         </div>
       </div>
       {/* Botón Kiosko debajo del grid */}
-      {selectedCategory === null && (
-        <div className={`${style.gridkiosko} ${style.kiosko}`} onClick={() => handleCategoryClick('kiosko')}>
-          <button className={style.button}>Kiosko</button>
-        </div>
-      )}
+      <div className={`${style.gridkiosko} ${style.kiosko}`}>
+        <button className={style.button}>Kiosko</button>
+      </div>
     </div>
   );
 };
