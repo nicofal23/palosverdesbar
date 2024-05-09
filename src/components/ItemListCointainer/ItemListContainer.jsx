@@ -15,6 +15,7 @@ const ItemListContainer = ({ greeting }) => {
   const { categoryId } = useParams();
   const subnombreButtonsRef = useRef(null);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -30,10 +31,8 @@ const ItemListContainer = ({ greeting }) => {
           return { id: doc.id, ...data };
         });
 
-        // Agrupar los productos por subnombre
         const groupedProductos = groupBy(productosAdapted, 'subnombre');
 
-        // Transformar el objeto agrupado en un array de objetos
         const groupedProductosArray = Object.keys(groupedProductos).map((subnombre) => ({
           subnombre,
           productos: groupedProductos[subnombre],
@@ -49,8 +48,22 @@ const ItemListContainer = ({ greeting }) => {
       });
   }, [categoryId]);
 
+  useEffect(() => {
+    const handleNavigation = (event) => {
+      if (event.persisted) {
+        window.history.replaceState(null, null, '/');
+      }
+    };
+
+    window.addEventListener('popstate', handleNavigation);
+
+    return () => {
+      window.removeEventListener('popstate', handleNavigation);
+    };
+  }, []);
+
   const handleReturnClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Llevar al usuario arriba de la pantalla
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSubnombreClick = (subnombre) => {
@@ -67,10 +80,9 @@ const ItemListContainer = ({ greeting }) => {
     }
   };
 
-  // Estilos personalizados para el icono
   const ThickArrowUpwardIcon = styled(ExpandLessIcon)({
-    fontSize: '36px', // Tamaño más grande
-    fontWeight: 'bold', // Hacer el icono más grueso
+    fontSize: '36px',
+    fontWeight: 'bold',
   });
 
   return (
@@ -80,12 +92,9 @@ const ItemListContainer = ({ greeting }) => {
           <h2 className={`${style.mt5} ${style.greeting}`}>{greeting}</h2>
           {loading && <LoadingSpinner />}
           <div className={style.categoryButtons} style={{ display: loading ? 'none' : 'block' }}>
-            <div className={style.gridContainer}>
-              {/* No hay selección de categoría en este componente */}
-            </div>
+            <div className={style.gridContainer}></div>
           </div>
 
-          {/* Aquí creamos los botones de los subnombres */}
           {loading ? null : productos.length > 0 && (
             <div className={style.subnombreButtonsContainer}>
               <button className={`${style.arrowButton} ${style.arrowLeft}`} onClick={() => scroll(-100)} disabled={scrollLeft === 0}>
@@ -108,7 +117,6 @@ const ItemListContainer = ({ greeting }) => {
             productos.map((grupo) => (
               <div key={grupo.subnombre} className={style.subnombre}>
                 <h3 id={grupo.subnombre}>{grupo.subnombre}</h3>
-                {/* Pasar la función setSelectedProduct como prop al componente ItemList */}
                 <ItemList productos={grupo.productos} categoryId={categoryId} />
               </div>
             ))
@@ -118,9 +126,10 @@ const ItemListContainer = ({ greeting }) => {
           )}
         </div>
       </div>
-      {/* Botón Kiosko debajo del grid */}
-      <div className={`${style.gridkiosko} ${style.kiosko}`}>
-        <button className={style.button}>Kiosko</button>
+      <div>
+        <button className={style.buttonreturn} onClick={handleReturnClick}>
+          <ThickArrowUpwardIcon />
+        </button>
       </div>
     </div>
   );
