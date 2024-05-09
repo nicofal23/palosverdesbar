@@ -60,6 +60,7 @@ const ItemListContainer = ({ greeting }) => {
   const handleReturnClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' }); // Llevar al usuario arriba de la pantalla
   };
+
   const handleSubnombreClick = (subnombre) => {
     const element = document.getElementById(subnombre);
     if (element) {
@@ -69,7 +70,7 @@ const ItemListContainer = ({ greeting }) => {
 
   const scroll = (scrollOffset) => {
     if (subnombreButtonsRef.current) {
-      subnombreButtonsRef.current.style.transform = `translateX(${scrollOffset}px)`;
+      subnombreButtonsRef.current.style.transform = `translateX(${scrollLeft + scrollOffset}px)`;
       setScrollLeft(scrollLeft + scrollOffset);
     }
   };
@@ -106,15 +107,14 @@ const ItemListContainer = ({ greeting }) => {
               )}
               {selectedCategory !== null && (
                 <div>
-                <button className={style.buttonreturn} onClick={handleReturnClick}>
-                  <ThickArrowUpwardIcon /> {/* Aquí se añade el icono */}
-                </button>
-              </div>
-              
+                  <button className={style.buttonreturn} onClick={handleReturnClick}>
+                    <ThickArrowUpwardIcon /> {/* Aquí se añade el icono */}
+                  </button>
+                </div>
               )}
             </div>
           </div>
-          
+
           {/* Aquí creamos los botones de los subnombres */}
           {selectedCategory !== null && !loading && productos.length > 0 && (
             <div className={style.subnombreButtonsContainer}>

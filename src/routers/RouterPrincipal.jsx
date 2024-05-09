@@ -12,26 +12,27 @@ import MesaDetail from "../components/MesaDetail/MesaDetail.jsx";
 import Modal from "../components/Modal/Modal.jsx";
 import MesaAbrir from "../components/Mesa/MesaAbrir.jsx";
 import ItemDetail from "../components/ItemDetail/ItemDetail.jsx";
+import ItemListCategorySelector from "../components/ItemListCointainer/ItemListCategorySelector.jsx";
 
 const RouterPrincipal = () => {
   return (
     <BrowserRouter>
       <CartProvider>
-          <Routes>
-            <Route path="/" element={<ItemListContainer/>} />
-            <Route path="/admin" element={<Prueba />} />
-            <Route path="/carta" element={<ItemListContainer/>} />
-            <Route path="/:categoryId" element={<ItemListContainer />} />
-            <Route path="/administrar-mesas" element={<Mesa />}/>
-            <Route path="/mesas-abiertas" element={<MesaList/>}/>
-            <Route path="/abrir-mesa" element={<MesaAbrir/>}/>
-            <Route path="/mesa/:id" element={<MesaDetail />} /> {/* Nueva ruta para la página de detalles de la mesa */}
-            <Route path="/73K9pQzX5E" element={<FormularioCargaDatos/>}/>
-            <Route path="/R4s8W2nY6P" element={<ModificarProductos/>}/>
-            <Route path="/item/:id" element={<ItemDetail/>}/> {/* Definir la ruta para ItemDetail */}
-          </Routes>
-        </CartProvider>
-    </BrowserRouter> 
+        <Routes>
+          <Route path="/" element={<ItemListCategorySelector />} />
+          <Route path="/admin" element={<Prueba />} />
+          <Route path="/carta" element={<ItemListContainer />} />
+          <Route path="/administrar-mesas" element={<Mesa />} />
+          <Route path="/mesas-abiertas" element={<MesaList />} />
+          <Route path="/abrir-mesa" element={<MesaAbrir />} />
+          <Route path="/mesa/:id" element={<MesaDetail />} />
+          <Route path="/73K9pQzX5E" element={<FormularioCargaDatos />} />
+          <Route path="/R4s8W2nY6P" element={<ModificarProductos />} />
+          <Route path="/item/:id" element={<ItemDetail />} />
+          <Route path="/:categoryId" element={<ItemListContainer />} />
+        </Routes>
+      </CartProvider>
+    </BrowserRouter>
   );
 };
 

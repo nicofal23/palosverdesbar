@@ -30,6 +30,7 @@
     border-top-right-radius: 10px;
     border-bottom-left-radius: 50%; /* Hace la parte inferior de la imagen ovalada */
     border-bottom-right-radius: 50%; /* Hace la parte inferior de la imagen ovalada */
+    position: relative;
   }
   
   
@@ -38,3 +39,25 @@
     margin-top: 20px;
   }
   
+
+  .precio{
+    color: #ae8e4a;
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  .boton{
+    color: white;
+  }
+
+  .botonback {
+    width: 30%;
+    position: absolute !important;
+    z-index: 2;
+    background-color: #65646430 !important;
+    display: flex;
+    justify-content: flex-start !important;
+    border-radius: 0% !important;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+  }
