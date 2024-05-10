@@ -12,6 +12,11 @@
 
 }
 
+.botonesEditor{
+  display: flex;
+    gap: 20px;
+}
+
 .mesaCard {
   border: 1px solid #ccc;
   border-radius: 5px;

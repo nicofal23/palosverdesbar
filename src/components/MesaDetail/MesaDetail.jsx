@@ -6,6 +6,7 @@ import ItemListMesa from '../ItemListMesa/ItemListMesa';
 import Swal from 'sweetalert2';
 import styles from './MesaCard.module.css';
 import { jsPDF } from 'jspdf';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 const MesaDetail = () => {
   const { id } = useParams(); // Obtener el id de los parámetros de la URL
@@ -218,32 +219,42 @@ const handleReimprimirTicket = async () => {
     <div className={styles.contenedor}>
       {loading ? (
         <div className={styles.mesa}>
-          <p>Cargando detalles de la mesa...</p>
-        </div>
+            <LoadingSpinner />
+      </div>
       ) : mesa ? (
         <div className={styles.detallemesa}>
           <div className={styles.detalles}>
             <p>Número de Mesa: {mesa.numeroMesa}</p>
+            <p>Socio: {mesa.nombreSocio}</p>
             <p>Fecha de Creación: {mesa.createdAt ? new Date(mesa.createdAt.seconds * 1000).toLocaleString() : 'No disponible'}</p>
             <p>Estado: {mesa.estado ? 'Abierta' : 'Cerrada'}</p>
             <div className={styles.conteinerH2}>
               <h2 className={styles.titulo}>Productos en la mesa:</h2>
             </div>
             {productosMesa.map((producto, index) => (
-              <div key={index} className={styles.card}>
-                <div className={styles.cardMesa}>
-                  <p>Producto: {producto.nombre}</p>
-                  <p>Precio: ${producto.precio}</p>
-                  <p>Cantidad: {producto.cantidad}</p>
-                  <div>
-                    <button onClick={() => handleModificarCantidad(index)}>Modificar</button>
-                  </div>
-                </div>
-                <div className={styles.delete}>
-                  <button onClick={() => handleEliminarProducto(index)}>X</button>
-                </div>
-              </div>
-            ))}
+  <div key={index} className={styles.card}>
+    <div className={styles.cardMesa}>
+      <p>Producto: {producto.nombre}</p>
+      <p>Precio: ${producto.precio}</p>
+      <p>Cantidad: {producto.cantidad}</p>
+      <div className={styles.botonesEditor}>
+        {/* Deshabilitar los botones si la mesa está cerrada */}
+        <button onClick={() => handleModificarCantidad(index)} disabled={!mesa.estado}>
+          Modificar
+        </button>
+        <button onClick={() => handleEliminarProducto(index)} disabled={!mesa.estado}>
+          Eliminar
+        </button>
+      </div>
+    </div>
+    <div className={styles.delete}>
+      <button onClick={() => handleEliminarProducto(index)} disabled={!mesa.estado}>
+        X
+      </button>
+    </div>
+  </div>
+))}
+
             <p className={styles.parrafo}>Total: ${totalCompra}</p> {/* Mostrar el total de la compra */}
             {mesa.estado && (
               <button onClick={handleCerrarMesa}>Cerrar Mesa</button>

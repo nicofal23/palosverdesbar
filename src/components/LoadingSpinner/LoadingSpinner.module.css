@@ -1,12 +1,13 @@
 .loading {
-    display: flex;
-    justify-content: center;
-    align-items: start;
-    height: 100vh; 
-  }
-  
-  .spinner {
-    margin-top: 10%;
-    width: 200px; 
-    height: 200px;
-  } 
+  display: flex;
+  flex-direction: column; /* Alinea los elementos en columna */
+  align-items: center; /* Centra horizontalmente */
+  height: 100vh; 
+  color: white;
+}
+
+.spinner {
+  margin-bottom: 20px; /* Espacio entre el spinner y el texto */
+  width: 200px; 
+  height: 200px;
+}

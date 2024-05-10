@@ -5,14 +5,9 @@ import { Spinner } from 'reactstrap';
 const LoadingSpinner = () => {
   return (
     <div className={style.loading}>
-      <Spinner
-  color="secondary"
-  size="sm"
-  type="grow"
->
-  Loading...
-</Spinner>
-    </div>
+    <Spinner color="secondary" size="sm" type="grow" />
+    <p>Cargando...</p>
+  </div>
   );
 };
 
