@@ -26,7 +26,7 @@ Acceder al panel de administración es fácil, simplemente agregue `/admin` a la
 
 ## Tecnologías Utilizadas
 
-Moniessen está construido utilizando las siguientes tecnologías:
+ Está construido utilizando las siguientes tecnologías:
 
 - **React**: Una biblioteca de JavaScript para construir interfaces de usuario.
 - **React Router**: Utilizado para el enrutamiento dentro de la aplicación.
