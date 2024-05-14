@@ -1,5 +1,5 @@
 {
-  "name": "moniessen",
+  "name": "palosverdes",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -15,6 +15,7 @@
     "@mui/icons-material": "^5.15.16",
     "@mui/material": "^5.15.16",
     "bootstrap": "^5.3.2",
+    "dotenv": "^16.4.5",
     "firebase": "^10.7.0",
     "jspdf": "^2.5.1",
     "lodash": "^4.17.21",

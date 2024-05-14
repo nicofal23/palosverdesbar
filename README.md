@@ -1,45 +1,54 @@
-# Proyecto de Ventas de Ollas Essen
+# Palos verdes - Aplicación Web para Restaurantes
 
-Bienvenido al repositorio de mi proyecto de ventas de ollas Essen desarrollado en React con Vite. Este proyecto tiene como objetivo ofrecer una plataforma intuitiva y atractiva para la compra de ollas Essen, utilizando tecnologías modernas de desarrollo web.
- 
-## Capturas de Pantalla
+palos verdes es una aplicación web diseñada para facilitar las tareas de gestión de restaurantes, proporcionando tanto una interfaz para los usuarios finales para ver el menú, como un panel de administración para gestionar productos, mesas y pedidos.
 
-## Captura de Pantalla 1
+## Interfaz de Usuario
 
-<img src="https://i.ibb.co/XSLjQyF/img1.png" alt="captura 1" style= "width:600px">
+La interfaz de usuario de Palosverdes es sencilla e intuitiva. Los usuarios pueden navegar por el menú del restaurante, seleccionar los artículos que desean pedir y ver información detallada sobre cada artículo. Al seleccionar un producto, pueden ver su descripción, precio y cualquier opción adicional disponible.
 
-## Captura de Pantalla 2
+![Menú]()
 
-<img src="https://i.ibb.co/6DnDfGR/img2.png" alt="captura 2" style= "width:600px">
+## Panel de Administración
 
-## Tecnologías Utilizadas 
+Acceder al panel de administración es fácil, simplemente agregue `/admin` a la URL e ingrese usuario y contraseña. Aquí, los administradores tienen acceso a tres funcionalidades principales:
 
-- **React**: La interfaz de usuario se construye utilizando React, permitiendo una estructura de componentes modular y mantenible.
+1. **Agregar Productos**: Los administradores pueden agregar fácilmente nuevos productos al menú. Pueden especificar el nombre del producto, la descripción, el precio y cargar una imagen para mostrar el artículo, en caso de no cargar ninguna imagen , se agrega el logo por defecto.
 
-- **Vite**: Se utiliza Vite como el entorno de desarrollo para la construcción rápida y eficiente de la aplicación. Vite proporciona un entorno de desarrollo rápido con recarga en caliente.
+   ![Agregar Productos](add_products_screenshot.png)
 
-- **Bootstrap**: La interfaz de usuario se ha diseñado utilizando Bootstrap para asegurar un diseño receptivo y agradable.
+2. **Gestionar Mesas**: En esta sección, los administradores pueden manejar tareas de gestión de mesas. Pueden abrir nuevas mesas, gestionar mesas actualmente abiertas añadiendo o eliminando productos según lo solicitado por los clientes, y ver mesas cerradas donde pueden descargar la remito en formato PDF.
 
-- **React Icons**: Se han incorporado iconos de React Icons para mejorar la experiencia visual y la usabilidad de la aplicación.
+   ![Gestionar Mesas](manage_tables_screenshot.png)
 
-- **SweetAlert2**: La gestión de alertas y notificaciones se realiza con SweetAlert2, proporcionando mensajes atractivos y personalizables.
+3. **Modificar Productos**: Aquí, los administradores pueden modificar productos existentes. Pueden ajustar precios, actualizar descripciones, eliminar productos o cambiar imágenes de productos.
 
+   ![Modificar Productos](modify_products_screenshot.png)
 
-## Instalación
+## Tecnologías Utilizadas
 
-1. Clona este repositorio en tu máquina local.
+Moniessen está construido utilizando las siguientes tecnologías:
 
-   ```bash
-   git clone https://github.com/nicofal23/proyectoreact
+- **React**: Una biblioteca de JavaScript para construir interfaces de usuario.
+- **React Router**: Utilizado para el enrutamiento dentro de la aplicación.
+- **Material-UI**: Proporciona componentes para construir la interfaz de usuario.
+- **Bootstrap**: Utilizado para estilizar componentes.
+- **Firebase**: Proporciona servicios backend como autenticación y gestión de bases de datos.
+- **JSPDF**: Permite la generación de documentos PDF.
+- **SweetAlert2**: Para mostrar cuadros de diálogo modales.
+- **dotenv**: Para gestionar variables de entorno.
+- **lodash**: Una biblioteca de utilidades para simplificar tareas de programación.
+- **Vite**: Una herramienta de frontend de próxima generación.
 
-2. Instala las dependencias.
+## Instalación y Uso
 
-```bash
-npm install
-```
-3. Inicia la aplicación.
+Para ejecutar la aplicación web Moniessen localmente, siga estos pasos:
 
-```bash
-npm run dev
-```
-La aplicación estará disponible en http://localhost:5173.
+1. Clona este repositorio.
+2. Navega al directorio del proyecto.
+3. Ejecuta `npm install` para instalar las dependencias.
+4. Ejecuta `npm run dev` para iniciar el servidor de desarrollo.
+5. Abre tu navegador y ve a `http://localhost:3000` para ver la aplicación.
+
+## Licencia
+
+Este proyecto pertenece a Nicolás Falciglio.

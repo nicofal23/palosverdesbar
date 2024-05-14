@@ -3,15 +3,14 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage, ref, deleteObject, getDownloadURL, uploadBytes } from "firebase/storage"; // Importa getDownloadURL desde el módulo storage
 
-
 const firebaseConfig = {
-  apiKey: "AIzaSyAMDkbwz5ADBUG3dW0kzYcPDfoLxvErq1E",
-  authDomain: "palosverdes-a3ee3.firebaseapp.com",
-  projectId: "palosverdes-a3ee3",
-  storageBucket: "palosverdes-a3ee3.appspot.com",
-  messagingSenderId: "376076202428",
-  appId: "1:376076202428:web:c854a81a71d024a1e1fbb9"
-  };
+  apiKey: import.meta.env.VITE_REACT_APP_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_REACT_APP_FIREBASE_APP_ID
+};
 
 // Inicializa la aplicación Firebase
 const app = initializeApp(firebaseConfig);
