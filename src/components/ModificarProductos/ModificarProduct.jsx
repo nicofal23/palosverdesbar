@@ -172,7 +172,7 @@ const ModificarProductos = () => {
                                 </p>
                             </div>
                             <section className={styles.productDetails}>
-                                <div>
+                                <div className={styles.counteinerPrecio}>
                                     <p className={styles.productPrice}>
                                         ${producto.precio}
                                     </p>
@@ -217,7 +217,6 @@ const ModificarProductos = () => {
                                 }} />
                             </section>
                             {/* Botón para eliminar producto */}
-                            <p>Cambiar imagen</p>
                             <button onClick={() => eliminarProducto(producto.id, producto.img)}>Eliminar Producto</button>
                             {/* Botón para confirmar la modificación */}
                             {productoModificando === producto.id && nuevaImagen && (
