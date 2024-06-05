@@ -129,7 +129,24 @@ p{
   width: 50%;
 }
 
-picture {
+
+
+
+
+
+@media (max-width: 802px) {
+.picture {
   display: flex;
   justify-content: center;
+}
+.productImg{
+  width: 50%;
+}
+.productItem{
+  display: flex;
+  flex-direction: column-reverse;
+}
+.productInfo{
+  flex: none;
+}
 }

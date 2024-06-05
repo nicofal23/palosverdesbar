@@ -217,6 +217,7 @@ const ModificarProductos = () => {
                                 }} />
                             </section>
                             {/* Botón para eliminar producto */}
+                            <p>Cambiar imagen</p>
                             <button onClick={() => eliminarProducto(producto.id, producto.img)}>Eliminar Producto</button>
                             {/* Botón para confirmar la modificación */}
                             {productoModificando === producto.id && nuevaImagen && (
@@ -224,7 +225,7 @@ const ModificarProductos = () => {
                             )}
                         </div>
                         <div className={styles.productImage}>
-                            <picture>
+                            <picture className={styles.picture}>
                                 <img src={producto.img} alt={producto.nombre} className={styles.productImg} />
                             </picture>
                         </div>
